@@ -635,13 +635,10 @@ blockquote {
   animation-fill-mode: forwards;
 }
 header {
-  width: 80% !important;
-}
-header.post-header {
-  width: auto !important;
+  width: 90%;
 }
 .container .main-inner {
-  width: 80%;
+  width: 90%;
 }
 .content-wrap {
   width: calc(100% - 260px);
