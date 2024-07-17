@@ -64,6 +64,7 @@
       <p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
 <h2 id="Pinsker-不等式证明"><a href="#Pinsker-不等式证明" class="headerlink" title="Pinsker 不等式证明"></a>Pinsker 不等式证明</h2><p><strong>(Pinsker’s inequality)</strong>设 $P$ 和 $Q$ 是定义在论域 $U$ 上的两个概率分布，那么</p>
 <script type="math/tex; mode=display">D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2 \tag{1}</script><p>由 Pinsker 不等式可以得到负熵函数关于$1$-范数是强凸的，下面先给出 Pinsker 不等式的证明。</p>
+<span id="more"></span> 
 <p><strong>$Proof.$</strong><br>首先我们给出 KL 散度的链式法则：</p>
 <script type="math/tex; mode=display">\begin{aligned}
 D_{KL}(P(X, Y)||Q(X, Y)) &= \sum_{x,y} p(x, y) \log \frac{p(x, y)}{q(x, y)} \\\\

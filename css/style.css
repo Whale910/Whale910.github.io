@@ -634,6 +634,18 @@ blockquote {
   animation: route-trans-o 0.8s;
   animation-fill-mode: forwards;
 }
+header {
+  width: 80% !important;
+}
+header.post-header {
+  width: auto !important;
+}
+.container .main-inner {
+  width: 80%;
+}
+.content-wrap {
+  width: calc(100% - 260px);
+}
 @-moz-keyframes route-trans-e {
   0% {
     transform: translate3d(-100px, 0, 0);

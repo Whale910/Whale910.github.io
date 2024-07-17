@@ -71,7 +71,8 @@
 <p>(1) 对于梯度下降，证明如果 $ \Sigma $ 的谱范数满足</p>
 <script type="math/tex; mode=display">\| \Sigma \|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $ i $，$\text{Loss}(w_i)$ 是有界的)。(注意，这蕴含了一个依赖维度的 $\Vert \Sigma \Vert_F \leq \frac{2\sqrt{d}}{s} $，其中 $ d $ 是 $w$ 的维度)。</p>
 <p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $ i $ 都有界，则以下独立于维度的不等式必须成立</p>
-<script type="math/tex; mode=display">\| \Sigma \|_F \leq \frac{\sqrt{b \delta}}{s}</script><p>(1) <strong>$Proof.$</strong><br>由过参数化的条件有， $F(x_j; w^\ast) = y_j$，那么</p>
+<script type="math/tex; mode=display">\| \Sigma \|_F \leq \frac{\sqrt{b \delta}}{s}</script><span id="more"></span> 
+<p>(1) <strong>$Proof.$</strong><br>由过参数化的条件有， $F(x_j; w^\ast) = y_j$，那么</p>
 <script type="math/tex; mode=display">\begin{aligned}
 Loss(w_i)&=\frac{1}{2m} \sum_{j=1}^m(F(x_j; w^\ast) + (w - w^\ast)^T \nabla F(x_j; w^\ast)-y_j)^2 \\\\
 &= \frac{1}{2m} \sum_{j=1}^m((w - w^\ast)^T \nabla F(x_j; w^\ast))^2
@@ -88,7 +89,7 @@ w_{i+1}-w^\ast&=w_i - s\nabla Loss(w_i)-w^\ast \\\\
 ||I-s\Sigma||_2&=||P(I-s\Sigma)P^T||_2 \\\\
 &=||I-s\Lambda||_2 \\\\
 &=\rho (I-s\Lambda)
-\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho (\Sigma) \leq \frac{2}{s}$，可得 $I-s\Lambda$ 对角线上元素范围为 $[-1,1]$，<br>即 $\rho (I-s\Lambda) \leq 1$</p>
+\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho (\Sigma) \leq \frac{2}{s}$，可得 $I-s\Lambda$ 对角线上元素范围为 $[-1,1]$，即 $\rho (I-s\Lambda) \leq 1$</p>
 <p>所以 </p>
 <script type="math/tex; mode=display">\begin{aligned}
 ||w_{i+1}-w^\ast||_2\leq ||w_{i}-w^\ast||_2 \leq ... \leq ||w_{0}-w^\ast||_2
