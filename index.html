@@ -62,6 +62,151 @@
     <header class="title">
       
         <h1>
+          <a href="/2024/07/17/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC4%E9%A2%98/">2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2024-07-17T14:12:42.000Z" itemprop="datePublished">
+    2024-07-17
+  </time>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p><strong>T4</strong>. 考虑如下两个优化问题：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+        \text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\
+        &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}.</script><p>和</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+        \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta \mathbf{g}(x)^\top \mathbf{1}_p,\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}.</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $ i = 1, \cdots, n $，$ x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N}) $，满足 $\sum_{i=1}^n m_i = m$. 函数 $ f : \mathbb{R}^m \rightarrow \mathbb{R} $ 和 $ \mathbf{g} : \mathbb{R}^m \rightarrow \mathbb{R}^p (p \in \mathbb{N}) $ 是多仿射的，即对任意 $ i \in \{1, \cdots, n\} $，在固定下标在 $\{1, \cdots, N\} \setminus \{i\} $ 中的块后，它们对 $ x_i $ 是仿射函数。这里，我们称一个函数 $ h : \mathbb{R}^q \rightarrow \mathbb{R}^r (q, r \in \mathbb{N}) $ 是仿射的，若对任意 $ a \in \mathbb{R} $ 以及 $ y^{(1)}, y^{(2)} \in \mathbb{R}^q $，有</p>
+<script type="math/tex; mode=display">h(ay^{(1)} + (1 - a)y^{(2)}) = ah(y^{(1)}) + (1 - a)h(y^{(2)}).</script><p>对任意 $ i \in \{1, \cdots, n\} $，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积. 此外，在问题 (B) 中，标量 $ \beta $ 是一个实数，$\mathbf{1}_p $ 代表 $ p $ 维全一向量.</p>
+<p>请证明如下三个结论：</p>
+<p>(1) 对任意 $ \beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点（即极点最优解）.</p>
+<p>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta &gt; \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
+<p>(3) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta &gt; \bar{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2024/06/25/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93/">2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2024-06-25T05:58:09.000Z" itemprop="datePublished">
+    2024-06-25
+  </time>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>先写一下第二题我的个人解答，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程当中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关。</p>
+<p><strong>T2</strong>. 假设 $ F(x; w) $ 是一个输出标量的深度神经网络，其中 $ x $ 是输入，$ w $ 表示权重。假设 $ F $ 关于 $ w $ 连续可微，并且对于训练数据 $\{ x_j, y_j \}_{j=1}^n $ 过参数化，即存在 $ w^\ast $ 使得对所有 $ j $ 满足 $ F(x_j; w^\ast) = y_j $。为了研究训练神经网络时 $ w^* $ 的局部优化行为，我们考虑线性化神经网络 $ \widetilde{F}(x; w) = F(x; w^\ast) + (w - w^\ast)^T \nabla F(x; w^\ast) $，其损失函数为</p>
+<script type="math/tex; mode=display">\text{Loss}(w) := \frac{1}{2m} \sum_{j=1}^m (y_j - \widetilde{F}(x_j; w))^2</script><p>令 $ s $ 表示学习率，梯度下降法为 </p>
+<script type="math/tex; mode=display">w_{i+1} = w_i - s \nabla \text{Loss}(w_i)</script><p>而随机梯度下降法为 </p>
+<script type="math/tex; mode=display">w_{i+1} = w_i - s (\nabla \text{Loss}(w_i) + \epsilon_i)</script><p>其中噪声项满足 $ \mathbb{E} \epsilon_i = 0 $ 和 $ \mathbb{E} \epsilon_i \epsilon_i^\top = M(w_i)/b $，$ b $ 是 mini-batch 的大小。假设协方差矩阵 $ \Sigma $ 为</p>
+<script type="math/tex; mode=display">\Sigma = \frac{1}{m} \sum_{j=1}^m \nabla F(x_j; w^\ast) \nabla F(x_j; w^\ast)^T</script><p>在以下意义上对齐：</p>
+<script type="math/tex; mode=display">\frac{\text{Tr}(M(w) \Sigma)}{2 \text{Loss}(w) \| \Sigma \|_F^2} \geq \delta</script><p>对于 $ s &gt; 0 $ 和所有 $ w $ 成立。这里 $| \cdot |_F$ 表示 Frobenius 范数。</p>
+<p>(1) 对于梯度下降，证明如果 $ \Sigma $ 的谱范数满足</p>
+<script type="math/tex; mode=display">\| \Sigma \|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $ i $，$\text{Loss}(w_i)$ 是有界的)。(注意，这蕴含了一个依赖维度的 $\Vert \Sigma \Vert_F \leq \frac{2\sqrt{d}}{s} $，其中 $ d $ 是 $w$ 的维度)。</p>
+<p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $ i $ 都有界，则以下独立于维度的不等式必须成立</p>
+<script type="math/tex; mode=display">\| \Sigma \|_F \leq \frac{\sqrt{b \delta}}{s}</script><p>(1) <strong>$Proof.$</strong><br>由过参数化的条件有， $F(x_j; w^\ast) = y_j$，那么</p>
+<script type="math/tex; mode=display">\begin{aligned}
+Loss(w_i)&=\frac{1}{2m} \sum_{j=1}^m(F(x_j; w^\ast) + (w - w^\ast)^T \nabla F(x_j; w^\ast)-y_j)^2 \\\\
+&= \frac{1}{2m} \sum_{j=1}^m((w - w^\ast)^T \nabla F(x_j; w^\ast))^2
+\end{aligned}</script><p>对 $Loss(w_i)$ 求梯度可得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+\nabla Loss(w_i)&=\frac{1}{m} \nabla F(x_j; w^\ast)\nabla F(x_j; w^\ast)^T(w_i-w^\ast) \\\\
+&=\Sigma (w_i-w^\ast) \\\\
+\end{aligned}</script><p>由梯度下降法的更新格式，有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+w_{i+1}-w^\ast&=w_i - s\nabla Loss(w_i)-w^\ast \\\\
+&=(I-s\Sigma)(w_i-w^\ast) \\\\
+\end{aligned}</script><p>对上式两边同时取 $2$ 范数，因为 $I-s\Sigma$ 为对称矩阵，因此一定存在矩阵 $P$ 使得 $I-s\Sigma$ 可以正交对角化，故</p>
+<script type="math/tex; mode=display">\begin{aligned}
+||I-s\Sigma||_2&=||P(I-s\Sigma)P^T||_2 \\\\
+&=||I-s\Lambda||_2 \\\\
+&=\rho (I-s\Lambda)
+\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho (\Sigma) \leq \frac{2}{s}$，可得 $I-s\Lambda$ 对角线上元素范围为 $[-1,1]$，<br>即 $\rho (I-s\Lambda) \leq 1$</p>
+<p>所以 </p>
+<script type="math/tex; mode=display">\begin{aligned}
+||w_{i+1}-w^\ast||_2\leq ||w_{i}-w^\ast||_2 \leq ... \leq ||w_{0}-w^\ast||_2
+\end{aligned}</script><p>由</p>
+<script type="math/tex; mode=display">\begin{aligned}
+Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
+\end{aligned}</script><p>可得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+|Loss(w_i)| &\leq \frac{1}{2} ||(w - w^\ast)||_2^2 ||\Sigma||_F \\\\
+&\leq \frac{\sqrt{d}||(w - w^\ast)||_2^2}{s}
+\end{aligned}</script><p>故梯度下降法是局部稳定的</p>
+<p>(2) <strong>$Proof.$</strong> </p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2024/06/24/Mirror-Descent/">Mirror Descent</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2024-06-24T11:46:15.000Z" itemprop="datePublished">
+    2024-06-24
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/%E4%BC%98%E5%8C%96/">优化</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2024/06/23/Pinsker-Inequality/">Pinsker Inequality</a>
         </h1>
       
@@ -89,7 +234,7 @@
         <p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
 <h2 id="Pinsker-不等式证明"><a href="#Pinsker-不等式证明" class="headerlink" title="Pinsker 不等式证明"></a>Pinsker 不等式证明</h2><p><strong>(Pinsker’s inequality)</strong>设 $P$ 和 $Q$ 是定义在论域 $U$ 上的两个概率分布，那么</p>
 <script type="math/tex; mode=display">D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2 \tag{1}</script><p>由 Pinsker 不等式可以得到负熵函数关于$1$-范数是强凸的，下面先给出 Pinsker 不等式的证明。</p>
-<p><strong>$Proof.$</strong>首先我们给出 KL 散度的链式法则：</p>
+<p><strong>$Proof.$</strong><br>首先我们给出 KL 散度的链式法则：</p>
 <script type="math/tex; mode=display">\begin{aligned}
 D_{KL}(P(X, Y)||Q(X, Y)) &= \sum_{x,y} p(x, y) \log \frac{p(x, y)}{q(x, y)} \\\\
 &= \sum_{x,y} p(x)p(y|x) \log \frac{p(x)p(y|x)}{q(x)q(y|x)} \\\\
@@ -139,14 +284,14 @@ Z = \begin{cases}
 D_{KL}(P || Q) & \geq D_{KL}(P_A || Q_A) \\\\
 & \geq \frac{1}{2} \| P_A - Q_A \|_1^2 \quad \text{(特殊情形)} \\\\
 &= \frac{1}{2} \| P - Q \|_1^2 \quad \text{(由公式 3)}
-\end{aligned}</script><p>这里给出对 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(Y|Z) | Q(Y|Z))] \geq 0 $ 的补充证明<br><strong>$Proof.$</strong> 只需证明 KL 散度的非负性即可，由 Jensen 不等式</p>
+\end{aligned}</script><p>这里给出对 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(Y|Z) | Q(Y|Z))] \geq 0 $ 的补充证明<br><strong>$Proof.$</strong><br>只需证明 KL 散度的非负性即可，由 Jensen 不等式</p>
 <script type="math/tex; mode=display">\begin{aligned}
 D_{KL}(P||Q)&=\sum_{\mathbf{x}} p(\mathbf{x}) (-\log \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
 &\geq -log(\sum_{\mathbf{x}}p(\mathbf{x}) \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
 &=-log(1) = 0
 \end{aligned}</script><h2 id="负熵函数的强凸性"><a href="#负熵函数的强凸性" class="headerlink" title="负熵函数的强凸性"></a>负熵函数的强凸性</h2><p>Mirror Descent 中的 Bregman 距离定义如下：</p>
 <script type="math/tex; mode=display">
-D(x,y)=f(x)-f(y)-\langle \nabla f(y), x - y \rangle</script><p>若此处的 $f(x) = \sum_{i=1}^n x_i \log x_i $，那么这里的 $D(x,y)$ 就是 $D_{KL}(x || y)$，下面给出负熵函数强凸性的证明：<br><strong>$Proof.$</strong> 令 $f(x) = \sum_{i=1}^n x_i \log x_i $</p>
+D(x,y)=f(x)-f(y)-\langle \nabla f(y), x - y \rangle</script><p>若此处的 $f(x) = \sum_{i=1}^n x_i \log x_i $，那么这里的 $D(x,y)$ 就是 $D_{KL}(x || y)$，下面给出负熵函数强凸性的证明：<br><strong>$Proof.$</strong><br>令 $f(x) = \sum_{i=1}^n x_i \log x_i $</p>
 <script type="math/tex; mode=display">\begin{aligned}
 f(x) &= f(y) + \langle \nabla f(y), x - y \rangle + D_{KL}(x || y) \quad \\\\
 &\geq f(y) + \langle \nabla f(y), x - y \rangle + \frac{1}{2} \|x - y\|_1^2 \quad 

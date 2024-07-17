@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题) | Whale</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body>
+<div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url()">
+        <div class='av-pic' style="background-image: url(/assets/1.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Whale</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</h1>
+    </header>
+
+    <section>
+      <p><strong>T4</strong>. 考虑如下两个优化问题：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+        \text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\
+        &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}.</script><p>和</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+        \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta \mathbf{g}(x)^\top \mathbf{1}_p,\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}.</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $ i = 1, \cdots, n $，$ x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N}) $，满足 $\sum_{i=1}^n m_i = m$. 函数 $ f : \mathbb{R}^m \rightarrow \mathbb{R} $ 和 $ \mathbf{g} : \mathbb{R}^m \rightarrow \mathbb{R}^p (p \in \mathbb{N}) $ 是多仿射的，即对任意 $ i \in \{1, \cdots, n\} $，在固定下标在 $\{1, \cdots, N\} \setminus \{i\} $ 中的块后，它们对 $ x_i $ 是仿射函数。这里，我们称一个函数 $ h : \mathbb{R}^q \rightarrow \mathbb{R}^r (q, r \in \mathbb{N}) $ 是仿射的，若对任意 $ a \in \mathbb{R} $ 以及 $ y^{(1)}, y^{(2)} \in \mathbb{R}^q $，有</p>
+<script type="math/tex; mode=display">h(ay^{(1)} + (1 - a)y^{(2)}) = ah(y^{(1)}) + (1 - a)h(y^{(2)}).</script><p>对任意 $ i \in \{1, \cdots, n\} $，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积. 此外，在问题 (B) 中，标量 $ \beta $ 是一个实数，$\mathbf{1}_p $ 代表 $ p $ 维全一向量.</p>
+<p>请证明如下三个结论：</p>
+<p>(1) 对任意 $ \beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点（即极点最优解）.</p>
+<p>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta &gt; \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
+<p>(3) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta &gt; \bar{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2024-07-17T14:12:42.000Z" itemprop="datePublished">
+              2024-07-17
+            </time>
+          </div>
+          
+      </section>
+    
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2024 - Whale </div>
+    <div>
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a target="_blank" rel="noopener" href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+
+<script src="/js/pager/dist/singlepager.js"></script>
+
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+</body>
+</html>

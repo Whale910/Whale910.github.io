@@ -64,7 +64,7 @@
       <p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
 <h2 id="Pinsker-不等式证明"><a href="#Pinsker-不等式证明" class="headerlink" title="Pinsker 不等式证明"></a>Pinsker 不等式证明</h2><p><strong>(Pinsker’s inequality)</strong>设 $P$ 和 $Q$ 是定义在论域 $U$ 上的两个概率分布，那么</p>
 <script type="math/tex; mode=display">D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2 \tag{1}</script><p>由 Pinsker 不等式可以得到负熵函数关于$1$-范数是强凸的，下面先给出 Pinsker 不等式的证明。</p>
-<p><strong>$Proof.$</strong>首先我们给出 KL 散度的链式法则：</p>
+<p><strong>$Proof.$</strong><br>首先我们给出 KL 散度的链式法则：</p>
 <script type="math/tex; mode=display">\begin{aligned}
 D_{KL}(P(X, Y)||Q(X, Y)) &= \sum_{x,y} p(x, y) \log \frac{p(x, y)}{q(x, y)} \\\\
 &= \sum_{x,y} p(x)p(y|x) \log \frac{p(x)p(y|x)}{q(x)q(y|x)} \\\\
@@ -114,14 +114,14 @@ Z = \begin{cases}
 D_{KL}(P || Q) & \geq D_{KL}(P_A || Q_A) \\\\
 & \geq \frac{1}{2} \| P_A - Q_A \|_1^2 \quad \text{(特殊情形)} \\\\
 &= \frac{1}{2} \| P - Q \|_1^2 \quad \text{(由公式 3)}
-\end{aligned}</script><p>这里给出对 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(Y|Z) | Q(Y|Z))] \geq 0 $ 的补充证明<br><strong>$Proof.$</strong> 只需证明 KL 散度的非负性即可，由 Jensen 不等式</p>
+\end{aligned}</script><p>这里给出对 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(Y|Z) | Q(Y|Z))] \geq 0 $ 的补充证明<br><strong>$Proof.$</strong><br>只需证明 KL 散度的非负性即可，由 Jensen 不等式</p>
 <script type="math/tex; mode=display">\begin{aligned}
 D_{KL}(P||Q)&=\sum_{\mathbf{x}} p(\mathbf{x}) (-\log \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
 &\geq -log(\sum_{\mathbf{x}}p(\mathbf{x}) \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
 &=-log(1) = 0
 \end{aligned}</script><h2 id="负熵函数的强凸性"><a href="#负熵函数的强凸性" class="headerlink" title="负熵函数的强凸性"></a>负熵函数的强凸性</h2><p>Mirror Descent 中的 Bregman 距离定义如下：</p>
 <script type="math/tex; mode=display">
-D(x,y)=f(x)-f(y)-\langle \nabla f(y), x - y \rangle</script><p>若此处的 $f(x) = \sum_{i=1}^n x_i \log x_i $，那么这里的 $D(x,y)$ 就是 $D_{KL}(x || y)$，下面给出负熵函数强凸性的证明：<br><strong>$Proof.$</strong> 令 $f(x) = \sum_{i=1}^n x_i \log x_i $</p>
+D(x,y)=f(x)-f(y)-\langle \nabla f(y), x - y \rangle</script><p>若此处的 $f(x) = \sum_{i=1}^n x_i \log x_i $，那么这里的 $D(x,y)$ 就是 $D_{KL}(x || y)$，下面给出负熵函数强凸性的证明：<br><strong>$Proof.$</strong><br>令 $f(x) = \sum_{i=1}^n x_i \log x_i $</p>
 <script type="math/tex; mode=display">\begin{aligned}
 f(x) &= f(y) + \langle \nabla f(y), x - y \rangle + D_{KL}(x || y) \quad \\\\
 &\geq f(y) + \langle \nabla f(y), x - y \rangle + \frac{1}{2} \|x - y\|_1^2 \quad 
