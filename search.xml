@@ -9,6 +9,55 @@
       </tags>
   </entry>
   <entry>
+    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</title>
+    <url>/2024/06/25/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC2%E9%A2%98/</url>
+    <content><![CDATA[<p>先写一下第二题我的个人解答，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程当中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关。</p>
+<p><strong>T2</strong>. 假设 $ F(x; w) $ 是一个输出标量的深度神经网络，其中 $ x $ 是输入，$ w $ 表示权重。假设 $ F $ 关于 $ w $ 连续可微，并且对于训练数据 $\{ x_j, y_j \}_{j=1}^n $ 过参数化，即存在 $ w^\ast $ 使得对所有 $ j $ 满足 $ F(x_j; w^\ast) = y_j $。为了研究训练神经网络时 $ w^* $ 的局部优化行为，我们考虑线性化神经网络 $ \widetilde{F}(x; w) = F(x; w^\ast) + (w - w^\ast)^T \nabla F(x; w^\ast) $，其损失函数为</p>
+<script type="math/tex; mode=display">\text{Loss}(w) := \frac{1}{2m} \sum_{j=1}^m (y_j - \widetilde{F}(x_j; w))^2</script><p>令 $ s $ 表示学习率，梯度下降法为 </p>
+<script type="math/tex; mode=display">w_{i+1} = w_i - s \nabla \text{Loss}(w_i)</script><p>而随机梯度下降法为 </p>
+<script type="math/tex; mode=display">w_{i+1} = w_i - s (\nabla \text{Loss}(w_i) + \epsilon_i)</script><p>其中噪声项满足 $ \mathbb{E} \epsilon_i = 0 $ 和 $ \mathbb{E} \epsilon_i \epsilon_i^\top = M(w_i)/b $，$ b $ 是 mini-batch 的大小。假设协方差矩阵 $ \Sigma $ 为</p>
+<script type="math/tex; mode=display">\Sigma = \frac{1}{m} \sum_{j=1}^m \nabla F(x_j; w^\ast) \nabla F(x_j; w^\ast)^T</script><p>在以下意义上对齐：</p>
+<script type="math/tex; mode=display">\frac{\text{Tr}(M(w) \Sigma)}{2 \text{Loss}(w) \| \Sigma \|_F^2} \geq \delta</script><p>对于 $ s &gt; 0 $ 和所有 $ w $ 成立。这里 $| \cdot |_F$ 表示 Frobenius 范数。</p>
+<p>(1) 对于梯度下降，证明如果 $ \Sigma $ 的谱范数满足</p>
+<script type="math/tex; mode=display">\| \Sigma \|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $ i $，$\text{Loss}(w_i)$ 是有界的)。(注意，这蕴含了一个依赖维度的 $\Vert \Sigma \Vert_F \leq \frac{2\sqrt{d}}{s} $，其中 $ d $ 是 $w$ 的维度)。</p>
+<p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $ i $ 都有界，则以下独立于维度的不等式必须成立</p>
+<script type="math/tex; mode=display">\| \Sigma \|_F \leq \frac{\sqrt{b \delta}}{s}</script><span id="more"></span> 
+<p>(1) <strong>$Proof.$</strong><br>由过参数化的条件有， $F(x_j; w^\ast) = y_j$，那么</p>
+<script type="math/tex; mode=display">\begin{aligned}
+Loss(w_i)&=\frac{1}{2m} \sum_{j=1}^m(F(x_j; w^\ast) + (w - w^\ast)^T \nabla F(x_j; w^\ast)-y_j)^2 \\\\
+&= \frac{1}{2m} \sum_{j=1}^m((w - w^\ast)^T \nabla F(x_j; w^\ast))^2
+\end{aligned}</script><p>对 $Loss(w_i)$ 求梯度可得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+\nabla Loss(w_i)&=\frac{1}{m} \sum_{j=1}^m\nabla F(x_j; w^\ast)\nabla F(x_j; w^\ast)^T(w_i-w^\ast) \\\\
+&=\Sigma (w_i-w^\ast) \\\\
+\end{aligned}</script><p>由梯度下降法的更新格式，有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+w_{i+1}-w^\ast&=w_i - s\nabla Loss(w_i)-w^\ast \\\\
+&=(I-s\Sigma)(w_i-w^\ast) \\\\
+\end{aligned}</script><p>对上式两边同时取 $2$ 范数，因为 $I-s\Sigma$ 为对称矩阵，因此一定存在矩阵 $P$ 使得 $I-s\Sigma$ 可以正交对角化，故</p>
+<script type="math/tex; mode=display">\begin{aligned}
+||I-s\Sigma||_2&=||P(I-s\Sigma)P^T||_2 \\\\
+&=||I-s\Lambda||_2 \\\\
+&=\rho (I-s\Lambda)
+\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho (\Sigma) \leq \frac{2}{s}$，可得 $I-s\Lambda$ 对角线上元素范围为 $[-1,1]$，即 $\rho (I-s\Lambda) \leq 1$</p>
+<p>所以 </p>
+<script type="math/tex; mode=display">\begin{aligned}
+||w_{i+1}-w^\ast||_2\leq ||w_{i}-w^\ast||_2 \leq ... \leq ||w_{0}-w^\ast||_2
+\end{aligned}</script><p>由</p>
+<script type="math/tex; mode=display">\begin{aligned}
+Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
+\end{aligned}</script><p>可得</p>
+<script type="math/tex; mode=display">\begin{aligned}
+|Loss(w_i)| &\leq \frac{1}{2} ||(w - w^\ast)||_2^2 ||\Sigma||_F \\\\
+&\leq \frac{\sqrt{d}||(w - w^\ast)||_2^2}{s}
+\end{aligned}</script><p>故梯度下降法是局部稳定的</p>
+<p>(2) <strong>$Proof.$</strong> </p>
+]]></content>
+      <tags>
+        <tag>Math</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Pinsker Inequality</title>
     <url>/2024/06/23/Pinsker-Inequality/</url>
     <content><![CDATA[<p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
@@ -80,55 +129,6 @@ f(x) &= f(y) + \langle \nabla f(y), x - y \rangle + D_{KL}(x || y) \quad \\\\
 ]]></content>
       <tags>
         <tag>优化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</title>
-    <url>/2024/06/25/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93/</url>
-    <content><![CDATA[<p>先写一下第二题我的个人解答，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程当中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关。</p>
-<p><strong>T2</strong>. 假设 $ F(x; w) $ 是一个输出标量的深度神经网络，其中 $ x $ 是输入，$ w $ 表示权重。假设 $ F $ 关于 $ w $ 连续可微，并且对于训练数据 $\{ x_j, y_j \}_{j=1}^n $ 过参数化，即存在 $ w^\ast $ 使得对所有 $ j $ 满足 $ F(x_j; w^\ast) = y_j $。为了研究训练神经网络时 $ w^* $ 的局部优化行为，我们考虑线性化神经网络 $ \widetilde{F}(x; w) = F(x; w^\ast) + (w - w^\ast)^T \nabla F(x; w^\ast) $，其损失函数为</p>
-<script type="math/tex; mode=display">\text{Loss}(w) := \frac{1}{2m} \sum_{j=1}^m (y_j - \widetilde{F}(x_j; w))^2</script><p>令 $ s $ 表示学习率，梯度下降法为 </p>
-<script type="math/tex; mode=display">w_{i+1} = w_i - s \nabla \text{Loss}(w_i)</script><p>而随机梯度下降法为 </p>
-<script type="math/tex; mode=display">w_{i+1} = w_i - s (\nabla \text{Loss}(w_i) + \epsilon_i)</script><p>其中噪声项满足 $ \mathbb{E} \epsilon_i = 0 $ 和 $ \mathbb{E} \epsilon_i \epsilon_i^\top = M(w_i)/b $，$ b $ 是 mini-batch 的大小。假设协方差矩阵 $ \Sigma $ 为</p>
-<script type="math/tex; mode=display">\Sigma = \frac{1}{m} \sum_{j=1}^m \nabla F(x_j; w^\ast) \nabla F(x_j; w^\ast)^T</script><p>在以下意义上对齐：</p>
-<script type="math/tex; mode=display">\frac{\text{Tr}(M(w) \Sigma)}{2 \text{Loss}(w) \| \Sigma \|_F^2} \geq \delta</script><p>对于 $ s &gt; 0 $ 和所有 $ w $ 成立。这里 $| \cdot |_F$ 表示 Frobenius 范数。</p>
-<p>(1) 对于梯度下降，证明如果 $ \Sigma $ 的谱范数满足</p>
-<script type="math/tex; mode=display">\| \Sigma \|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $ i $，$\text{Loss}(w_i)$ 是有界的)。(注意，这蕴含了一个依赖维度的 $\Vert \Sigma \Vert_F \leq \frac{2\sqrt{d}}{s} $，其中 $ d $ 是 $w$ 的维度)。</p>
-<p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $ i $ 都有界，则以下独立于维度的不等式必须成立</p>
-<script type="math/tex; mode=display">\| \Sigma \|_F \leq \frac{\sqrt{b \delta}}{s}</script><span id="more"></span> 
-<p>(1) <strong>$Proof.$</strong><br>由过参数化的条件有， $F(x_j; w^\ast) = y_j$，那么</p>
-<script type="math/tex; mode=display">\begin{aligned}
-Loss(w_i)&=\frac{1}{2m} \sum_{j=1}^m(F(x_j; w^\ast) + (w - w^\ast)^T \nabla F(x_j; w^\ast)-y_j)^2 \\\\
-&= \frac{1}{2m} \sum_{j=1}^m((w - w^\ast)^T \nabla F(x_j; w^\ast))^2
-\end{aligned}</script><p>对 $Loss(w_i)$ 求梯度可得</p>
-<script type="math/tex; mode=display">\begin{aligned}
-\nabla Loss(w_i)&=\frac{1}{m} \nabla F(x_j; w^\ast)\nabla F(x_j; w^\ast)^T(w_i-w^\ast) \\\\
-&=\Sigma (w_i-w^\ast) \\\\
-\end{aligned}</script><p>由梯度下降法的更新格式，有</p>
-<script type="math/tex; mode=display">\begin{aligned}
-w_{i+1}-w^\ast&=w_i - s\nabla Loss(w_i)-w^\ast \\\\
-&=(I-s\Sigma)(w_i-w^\ast) \\\\
-\end{aligned}</script><p>对上式两边同时取 $2$ 范数，因为 $I-s\Sigma$ 为对称矩阵，因此一定存在矩阵 $P$ 使得 $I-s\Sigma$ 可以正交对角化，故</p>
-<script type="math/tex; mode=display">\begin{aligned}
-||I-s\Sigma||_2&=||P(I-s\Sigma)P^T||_2 \\\\
-&=||I-s\Lambda||_2 \\\\
-&=\rho (I-s\Lambda)
-\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho (\Sigma) \leq \frac{2}{s}$，可得 $I-s\Lambda$ 对角线上元素范围为 $[-1,1]$，即 $\rho (I-s\Lambda) \leq 1$</p>
-<p>所以 </p>
-<script type="math/tex; mode=display">\begin{aligned}
-||w_{i+1}-w^\ast||_2\leq ||w_{i}-w^\ast||_2 \leq ... \leq ||w_{0}-w^\ast||_2
-\end{aligned}</script><p>由</p>
-<script type="math/tex; mode=display">\begin{aligned}
-Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
-\end{aligned}</script><p>可得</p>
-<script type="math/tex; mode=display">\begin{aligned}
-|Loss(w_i)| &\leq \frac{1}{2} ||(w - w^\ast)||_2^2 ||\Sigma||_F \\\\
-&\leq \frac{\sqrt{d}||(w - w^\ast)||_2^2}{s}
-\end{aligned}</script><p>故梯度下降法是局部稳定的</p>
-<p>(2) <strong>$Proof.$</strong> </p>
-]]></content>
-      <tags>
-        <tag>Math</tag>
       </tags>
   </entry>
   <entry>
