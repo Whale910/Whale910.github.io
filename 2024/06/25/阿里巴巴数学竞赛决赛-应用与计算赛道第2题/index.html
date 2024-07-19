@@ -18,7 +18,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":{"valine":{"order":-1}}},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="先写一下第二题我的个人解答，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程当中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关。 T2. 假设 $ F(x; w) $ 是一个输出标量的深度神经网络，其中 $ x $ 是输入，$ w $ 表示权重。假设 $ F $ 关于 $ w $ 连续可微，并且对于训练数据 $\{ x_j, y">
@@ -29,7 +29,7 @@
 <meta property="og:description" content="先写一下第二题我的个人解答，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程当中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关。 T2. 假设 $ F(x; w) $ 是一个输出标量的深度神经网络，其中 $ x $ 是输入，$ w $ 表示权重。假设 $ F $ 关于 $ w $ 连续可微，并且对于训练数据 $\{ x_j, y">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-06-25T05:58:09.000Z">
-<meta property="article:modified_time" content="2024-07-19T10:21:39.121Z">
+<meta property="article:modified_time" content="2024-07-19T11:58:07.455Z">
 <meta property="article:author" content="Whale">
 <meta property="article:tag" content="Matrix Theory">
 <meta property="article:tag" content="Over-parameterization">
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-07-19 18:21:39" itemprop="dateModified" datetime="2024-07-19T18:21:39+08:00">2024-07-19</time>
+                <time title="修改时间：2024-07-19 19:58:07" itemprop="dateModified" datetime="2024-07-19T19:58:07+08:00">2024-07-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -248,6 +248,13 @@
             </span>
 
           
+            <span id="/2024/06/25/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC2%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -255,19 +262,33 @@
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/06/25/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC2%E9%A2%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/06/25/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC2%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>820</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -376,6 +397,7 @@ Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -495,7 +517,6 @@ Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
   </span>
   <span class="author" itemprop="copyrightHolder">Whale</span>
 
-  
 </div>
 
         
@@ -654,6 +675,35 @@ Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
     
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '1LUgGEz6cvUl7QooxBa9TpCe-MdYXbMMI',
+      appKey     : '4sTtEJCAo4c1vPDF2BTN6wlJ',
+      placeholder: "写些什么吧……",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 
 </body>
 </html>
