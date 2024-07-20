@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://whale0910.top/2024/07/17/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC4%E9%A2%98/</loc>
+    
+    <lastmod>2024-07-20</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://whale0910.top/2024/06/24/Mirror-Descent/</loc>
     
     <lastmod>2024-07-20</lastmod>
@@ -23,15 +32,6 @@
     <loc>http://whale0910.top/2024/06/23/Pinsker-Inequality/</loc>
     
     <lastmod>2024-07-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://whale0910.top/2024/07/17/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC4%E9%A2%98/</loc>
-    
-    <lastmod>2024-07-19</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -118,20 +118,6 @@
   </url>
   
   <url>
-    <loc>http://whale0910.top/tags/Linear-Programming/</loc>
-    <lastmod>2024-07-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://whale0910.top/tags/Duality-Theory/</loc>
-    <lastmod>2024-07-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://whale0910.top/tags/Matrix-Theory/</loc>
     <lastmod>2024-07-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -147,6 +133,20 @@
   
   <url>
     <loc>http://whale0910.top/tags/Gradient-Descent/</loc>
+    <lastmod>2024-07-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://whale0910.top/tags/Linear-Programming/</loc>
+    <lastmod>2024-07-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://whale0910.top/tags/Duality-Theory/</loc>
     <lastmod>2024-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
