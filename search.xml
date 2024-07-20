@@ -1,94 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Pinsker Inequality</title>
-    <url>/2024/06/23/Pinsker-Inequality/</url>
-    <content><![CDATA[<p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
-<h2 id="Pinsker-不等式证明"><a href="#Pinsker-不等式证明" class="headerlink" title="Pinsker 不等式证明"></a>Pinsker 不等式证明</h2><p><strong>(Pinsker’s inequality)</strong>设 $P$ 和 $Q$ 是定义在论域 $U$ 上的两个概率分布，那么</p>
-<script type="math/tex; mode=display">D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2 \tag{1}</script><p>由 Pinsker 不等式可以得到负熵函数关于$1$-范数是强凸的，下面先给出 Pinsker 不等式的证明。</p>
-<p><strong>$Proof.$</strong><br>首先我们给出 KL 散度的链式法则：</p>
-<script type="math/tex; mode=display">\begin{aligned}
-D_{KL}(P(X, Y)||Q(X, Y)) &= \sum_{x,y} p(x, y) \log \frac{p(x, y)}{q(x, y)} \\\\
-&= \sum_{x,y} p(x)p(y|x) \log \frac{p(x)p(y|x)}{q(x)q(y|x)} \\\\
-&= \sum_{x} p(x) \log \frac{p(x)}{q(x)} \sum_{y} p(y|x) + \sum_{x} p(x) \sum_{y} p(y|x) \log \frac{p(y|x)}{q(y|x)} \\\\
-&= D_{KL}(P(X)||Q(X)) + \sum_{x} p(x) D_{KL}(P||Q|X=x) \\\\
-&= D_{KL}(P(X)||Q(X)) + \mathbb{E}_{X \thicksim P(X)}[D_{\text{KL}}(P(Y|X) \| Q(Y|X))]
-\end{aligned}
-\tag{2}</script><p>特别地，若$P(X,Y)=P_1(X)P_2(Y),Q(X,Y)=Q_1(X)Q_2(Y)$，那么有</p>
-<script type="math/tex; mode=display">D_{KL}(P(X, Y)||Q(X, Y)) = D_{KL}(P_1(X)||Q_1(X)) + D_{KL}(P_2(X)||Q_2(X))</script><span id="more"></span> 
-<p>先考虑 Pinsker 不等式的特殊情形：</p>
+    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</title>
+    <url>/2024/07/17/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC4%E9%A2%98/</url>
+    <content><![CDATA[<p>今天分享2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答.</p>
+<p><strong>T4</strong>. 考虑如下两个优化问题：</p>
 <script type="math/tex; mode=display">
-P = \begin{cases}
-1 & \text{w.p. } p \\
-0 & \text{w.p. } 1-p
-\end{cases}</script><script type="math/tex; mode=display">
-Q = \begin{cases}
-1 & \text{w.p. } q \\
-0 & \text{w.p. } 1-q
-\end{cases}</script><p>不妨假设 $p&gt;&gt;q$ (其它情况类似)，令</p>
+\begin{aligned}
+        \text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\
+        &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}</script><p>和</p>
 <script type="math/tex; mode=display">
-f(p, q) = p \log \frac{p}{q} + (1 - p) \log \frac{1 - p}{1 - q} - \frac{1}{2} (2(p - q))^2</script><p>由于</p>
+\begin{aligned}
+        \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p,\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $ i = 1, \cdots, n $，$ x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N}) $，满足 $\sum_{i=1}^n m_i = m$. 函数 $ f : \mathbb{R}^m \rightarrow \mathbb{R} $ 和 $ \mathbf{g} : \mathbb{R}^m \rightarrow \mathbb{R}^p (p \in \mathbb{N}) $ 是多仿射的，即对任意 $ i \in \{1, \cdots, n\} $，在固定下标在 $\{1, \cdots, N\} \setminus \{i\} $ 中的块后，它们对 $ x_i $ 是仿射函数。这里，我们称一个函数 $ h : \mathbb{R}^q \rightarrow \mathbb{R}^r (q, r \in \mathbb{N}) $ 是仿射的，若对任意 $ a \in \mathbb{R} $ 以及 $ y^{(1)}, y^{(2)} \in \mathbb{R}^q $，有</p>
+<script type="math/tex; mode=display">h(ay^{(1)} + (1 - a)y^{(2)}) = ah(y^{(1)}) + (1 - a)h(y^{(2)}).</script><p>对任意 $ i \in \{1, \cdots, n\} $，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积. 此外，在问题 (B) 中，标量 $ \beta $ 是一个实数，$\mathbf{1}_p $ 代表 $ p $ 维全一向量.</p>
+<p>请证明如下三个结论：</p>
+<p>(1) 对任意 $ \beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点（即极点最优解）.</p>
+<p>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
+<p>(3) 存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+<span id="more"></span> 
+<p>(1) <strong>$Proof.$</strong><br>假设 $x^\ast$ 为非极点的最优解，考虑 $x^\ast$ 为多边形的内点(边界点情况类似)，任取一个方向向量 $d$，构造函数</p>
+<script type="math/tex; mode=display">\varphi(t)=f(x^\ast+td)+\beta g(x^\ast+td)^T\mathbf{1}_p</script><p>由于，$f$ 和 $g$ 均为仿射函数，故 $\varphi$ 为关于 $t$ 的 $1$ 次函数，但由于 $x^\ast$ 为最优解，故 $\varphi (t)$ 不能是增函数，否则在沿 $d$ 的反方向上可以找到更小的值，与$x^\ast$ 为最优解矛盾，同理也不能是减函数，只能为常值函数。<br>同时，由于存在极值点的多面体中一定不包含直线(这句话的证明参考 《Introduction to Linear Optimization》 第 2.5 节)，故沿着 $d$ 或 $-d$ 方向可以走到多面体的区域边界，类似地，按照上面的构造方法沿着边界方向继续走，可以到找一个极点最优解。</p>
+<p>(2) <strong>$Proof.$</strong><br>显然问题 (B) 的目标函数为问题 (A) 的Lagrange对偶形式，记</p>
+<script type="math/tex; mode=display">L(x,\beta) = f(x) + \beta {g}(x)^\top \mathbf{1}_p</script><p>则问题 (A) 可以写为如下等价形式</p>
 <script type="math/tex; mode=display">
-\frac{\partial f}{\partial q} = -(p - q) \left( \frac{1}{q(1 - q)} - 4 \right) \leq 0</script><p>而且当 $p=q$ 时，有 $f=0$ ，可以得到当 $q \leq p$ 时，$f(p,q) \geq 0$ ，因此对于这种特殊情形，我们有 $D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2$ </p>
-<p>一般情形：<br>设 $P$ 和 $Q$ 是 $U$ 上的分布.令 $A \subset U$ 为</p>
-<script type="math/tex; mode=display">A = \{ x \mid p(x) \geq q(x) \}</script><p>定义 $P_A$ 和 $Q_A$ 如下：</p>
+\begin{aligned}
+         & \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta),\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}</script><p>问题 (A) 的 Lagrange 对偶问题可以写为如下形式</p>
 <script type="math/tex; mode=display">
-P_A = \begin{cases} 
-1 & \text{w.p.} \sum_{x \in A} p(x) \\
-0 & \text{w.p.} \sum_{x \notin A} p(x)
-\end{cases}</script><script type="math/tex; mode=display">
-Q_A = \begin{cases} 
-1 & \text{w.p.} \sum_{x \in A} q(x) \\
-0 & \text{w.p.} \sum_{x \notin A} q(x)
-\end{cases}</script><p>那么，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-\|P - Q\|_1 &= \sum_x |p(x) - q(x)| \\\\
- &= \sum_{x \in A} (p(x) - q(x)) + \sum_{x \notin A} (q(x) - p(x)) \\\\\
- &= \left| \sum_{x \in A} p(x) - \sum_{x \in A} q(x) \right| + \left| \left( 1 - \sum_{x \in A} p(x) \right) - \left( 1 - \sum_{x \in A} q(x) \right) \right| \\\\
- \|P - Q\|_1 &= \|P_A - Q_A\|_1 
-\end{aligned}
-\tag{3}</script><p>定义随机变量 </p>
+\begin{aligned}
+         & \mathop{\max}\limits_{\beta}\mathop{\min}\limits_{x}  L(x,\beta),\\\\
+        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
+\end{aligned}</script><p>由弱对偶性可以得到，对满足约束 $x_i \in \mathcal{F}_i, i = 1, \cdots, n$ 的 $x$ 有</p>
 <script type="math/tex; mode=display">
-Z = \begin{cases} 
-1 & \text{if } x \in A \\
-0 & \text{if } x \notin A
-\end{cases}</script><p>假设原来的概率分布 $P$ 和 $Q$ 的多元随机变量定义为 $X$，这里拼接新的一个维度，即将随机变量变为 $(X,Z)$，但根据 $Z$ 的定义，$Z$ 和概率分布 $P$，$Q$ 的取值都取决于$X$，新的随机变量 $(X,Z)$ 并不会影响原有的概率分布。<br>由公式(2) $ D_{KL}(P || Q) = D_{KL}(P(Z) || Q(Z)) + \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(X|Z) | Q(X|Z))] $<br>由于 $ D_{KL}(P(Z) || Q(Z)) = D_{KL}(P_A || Q_A) $ 且 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(X|Z) | Q(X|Z))] \geq 0 $, 我们有</p>
-<script type="math/tex; mode=display">\begin{aligned}
-D_{KL}(P || Q) & \geq D_{KL}(P_A || Q_A) \\\\
-& \geq \frac{1}{2} \| P_A - Q_A \|_1^2 \quad \text{(特殊情形)} \\\\
-&= \frac{1}{2} \| P - Q \|_1^2 \quad \text{(由公式 3)}
-\end{aligned}</script><p>这里给出对 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(Y|Z) | Q(Y|Z))] \geq 0 $ 的补充证明<br><strong>$Proof.$</strong><br>只需证明 KL 散度的非负性即可，由 Jensen 不等式</p>
-<script type="math/tex; mode=display">\begin{aligned}
-D_{KL}(P||Q)&=\sum_{\mathbf{x}} p(\mathbf{x}) (-\log \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
-&\geq -log(\sum_{\mathbf{x}}p(\mathbf{x}) \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
-&=-log(1) = 0
-\end{aligned}</script><h2 id="负熵函数的强凸性"><a href="#负熵函数的强凸性" class="headerlink" title="负熵函数的强凸性"></a>负熵函数的强凸性</h2><p>Mirror Descent 中的 Bregman 距离定义如下：</p>
+          \mathop{\max}\limits_{\beta}\mathop{\min}\limits_{x}  L(x,\beta) \leq \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta)</script><p>问题 (B) 的最优值的最大值小于问题 (A) 的最优值，因此只需证明对于问题 (B) 的最优解，存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的最优解都满足问题 (A) 的约束条件即可。</p>
+<p>记 $S$ 为 $g(x) = 0$ 的解集，则当 $\mathop{\min}\limits_{x \in S} f(x) \leq \mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p$ 时，问题 (B) 的最优解 $x^\ast \in S$，即 $x^\ast$ 满足问题 (A) 的约束条件。<br>由 $\mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p$，只需 $\mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \in S} f(x)$ 即可，由函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负解出</p>
 <script type="math/tex; mode=display">
-D(x,y)=f(x)-f(y)-\langle \nabla f(y), x - y \rangle</script><p>若此处的 $f(x) = \sum_{i=1}^n x_i \log x_i $，那么这里的 $D(x,y)$ 就是 $D_{KL}(x || y)$，下面给出负熵函数强凸性的证明：<br><strong>$Proof.$</strong><br>令 $f(x) = \sum_{i=1}^n x_i \log x_i $</p>
-<script type="math/tex; mode=display">\begin{aligned}
-f(x) &= f(y) + \langle \nabla f(y), x - y \rangle + D_{KL}(x || y) \quad \\\\
-&\geq f(y) + \langle \nabla f(y), x - y \rangle + \frac{1}{2} \|x - y\|_1^2 \quad 
-\end{aligned}</script><p>由强凸函数的性质，可以得到负熵函数 $f$ 在 $1$ 范数的意义下是强凸的。</p>
+\beta \geq \bar{\beta} = \cfrac{\mathop{\min}\limits_{x \in S} f(x)-\mathop{\min}\limits_{x \notin S} f(x)}{\mathop{\min}\limits_{x \notin S} {g}(x)^\top \mathbf{1}_p}</script><p>显然问题 (B) 的极点最优解属于其最优解，故存在这样一个 $\bar{\beta}$ 使得问题 (B) 的极点最优解都是问题 (A) 的最优解。</p>
+<p>(3) <strong>$Proof.$</strong><br>取 $\tilde{\beta} = \bar{\beta}$，由 (2) 可知，当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解都是问题 (A) 的最优解，下面只需要证明问题 (A) 的最优解都是问题 (B) 的最优解即可。<br>由函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，可得</p>
+<script type="math/tex; mode=display">
+\mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x} f(x)</script><p>且当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解满足问题 (A) 的最优解的约束条件，即问题 (A) 的最优解和问题 (B) 的最优解满足相同的约束条件，故问题 (A) 的最优解一定小于等于问题 (B) 的最优解，故问题 (A) 的最优解都是问题 (B) 的最优解。</p>
+<p>综上所述，存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同。</p>
 ]]></content>
       <categories>
         <category>Mathematics</category>
       </categories>
       <tags>
-        <tag>Probability Inequality</tag>
-        <tag>Strong-Convexity</tag>
-        <tag>KL Divergence</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mirror Descent</title>
-    <url>/2024/06/24/Mirror-Descent/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>Optimization</category>
-      </categories>
-      <tags>
-        <tag>Bregman Divergence</tag>
-        <tag>Dual Space</tag>
+        <tag>Linear Programming</tag>
+        <tag>Duality Theory</tag>
       </tags>
   </entry>
   <entry>
@@ -146,57 +109,95 @@ Loss(w_i) = \frac{1}{2} (w - w^\ast)^T \Sigma (w - w^\ast)
       </tags>
   </entry>
   <entry>
-    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</title>
-    <url>/2024/07/17/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B-%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93%E7%AC%AC4%E9%A2%98/</url>
-    <content><![CDATA[<p>今天分享2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答.</p>
-<p><strong>T4</strong>. 考虑如下两个优化问题：</p>
+    <title>Mirror Descent</title>
+    <url>/2024/06/24/Mirror-Descent/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>Optimization</category>
+      </categories>
+      <tags>
+        <tag>Bregman Divergence</tag>
+        <tag>Dual Space</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pinsker Inequality</title>
+    <url>/2024/06/23/Pinsker-Inequality/</url>
+    <content><![CDATA[<p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
+<h2 id="Pinsker-不等式证明"><a href="#Pinsker-不等式证明" class="headerlink" title="Pinsker 不等式证明"></a>Pinsker 不等式证明</h2><p><strong>(Pinsker’s inequality)</strong>设 $P$ 和 $Q$ 是定义在论域 $U$ 上的两个概率分布，那么</p>
+<script type="math/tex; mode=display">D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2 \tag{1}</script><p>由 Pinsker 不等式可以得到负熵函数关于$1$-范数是强凸的，下面先给出 Pinsker 不等式的证明。</p>
+<p><strong>$Proof.$</strong><br>首先我们给出 KL 散度的链式法则：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+D_{KL}(P(X, Y)||Q(X, Y)) &= \sum_{x,y} p(x, y) \log \frac{p(x, y)}{q(x, y)} \\\\
+&= \sum_{x,y} p(x)p(y|x) \log \frac{p(x)p(y|x)}{q(x)q(y|x)} \\\\
+&= \sum_{x} p(x) \log \frac{p(x)}{q(x)} \sum_{y} p(y|x) + \sum_{x} p(x) \sum_{y} p(y|x) \log \frac{p(y|x)}{q(y|x)} \\\\
+&= D_{KL}(P(X)||Q(X)) + \sum_{x} p(x) D_{KL}(P||Q|X=x) \\\\
+&= D_{KL}(P(X)||Q(X)) + \mathbb{E}_{X \thicksim P(X)}[D_{\text{KL}}(P(Y|X) \| Q(Y|X))]
+\end{aligned}
+\tag{2}</script><p>特别地，若$P(X,Y)=P_1(X)P_2(Y),Q(X,Y)=Q_1(X)Q_2(Y)$，那么有</p>
+<script type="math/tex; mode=display">D_{KL}(P(X, Y)||Q(X, Y)) = D_{KL}(P_1(X)||Q_1(X)) + D_{KL}(P_2(X)||Q_2(X))</script><span id="more"></span> 
+<p>先考虑 Pinsker 不等式的特殊情形：</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-        \text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\
-        &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\
-        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
-\end{aligned}</script><p>和</p>
+P = \begin{cases}
+1 & \text{w.p. } p \\
+0 & \text{w.p. } 1-p
+\end{cases}</script><script type="math/tex; mode=display">
+Q = \begin{cases}
+1 & \text{w.p. } q \\
+0 & \text{w.p. } 1-q
+\end{cases}</script><p>不妨假设 $p&gt;&gt;q$ (其它情况类似)，令</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-        \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p,\\\\
-        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
-\end{aligned}</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $ i = 1, \cdots, n $，$ x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N}) $，满足 $\sum_{i=1}^n m_i = m$. 函数 $ f : \mathbb{R}^m \rightarrow \mathbb{R} $ 和 $ \mathbf{g} : \mathbb{R}^m \rightarrow \mathbb{R}^p (p \in \mathbb{N}) $ 是多仿射的，即对任意 $ i \in \{1, \cdots, n\} $，在固定下标在 $\{1, \cdots, N\} \setminus \{i\} $ 中的块后，它们对 $ x_i $ 是仿射函数。这里，我们称一个函数 $ h : \mathbb{R}^q \rightarrow \mathbb{R}^r (q, r \in \mathbb{N}) $ 是仿射的，若对任意 $ a \in \mathbb{R} $ 以及 $ y^{(1)}, y^{(2)} \in \mathbb{R}^q $，有</p>
-<script type="math/tex; mode=display">h(ay^{(1)} + (1 - a)y^{(2)}) = ah(y^{(1)}) + (1 - a)h(y^{(2)}).</script><p>对任意 $ i \in \{1, \cdots, n\} $，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积. 此外，在问题 (B) 中，标量 $ \beta $ 是一个实数，$\mathbf{1}_p $ 代表 $ p $ 维全一向量.</p>
-<p>请证明如下三个结论：</p>
-<p>(1) 对任意 $ \beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点（即极点最优解）.</p>
-<p>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
-<p>(3) 存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
-<span id="more"></span> 
-<p>(1) <strong>$Proof.$</strong><br>假设 $x^\ast$ 为非极点的最优解，考虑 $x^\ast$ 为多边形的内点(边界点情况类似)，任取一个方向向量 $d$，构造函数</p>
-<script type="math/tex; mode=display">\varphi(t)=f(x^\ast+td)+\beta g(x^\ast+td)^T\mathbf{1}_p</script><p>由于，$f$ 和 $g$ 均为仿射函数，故 $\varphi$ 为关于 $t$ 的 $1$ 次函数，但由于 $x^\ast$ 为最优解，故 $\varphi (t)$ 不能是增函数，否则在沿 $d$ 的反方向上可以找到更小的值，与$x^\ast$ 为最优解矛盾，同理也不能是减函数，只能为常值函数。<br>同时，由于存在极值点的多面体中一定不包含直线(这句话的证明参考 《Introduction to Linear Optimization》 第 2.5 节)，故沿着 $d$ 或 $-d$ 方向可以走到多面体的区域边界，类似地，按照上面的构造方法沿着边界方向继续走，可以到找一个极点最优解。</p>
-<p>(2) <strong>$Proof.$</strong><br>显然问题 (B) 的目标函数为问题 (A) 的Lagrange对偶形式，记</p>
-<script type="math/tex; mode=display">L(x,\beta) = f(x) + \beta {g}(x)^\top \mathbf{1}_p</script><p>则问题 (A) 可以写为如下等价形式</p>
+f(p, q) = p \log \frac{p}{q} + (1 - p) \log \frac{1 - p}{1 - q} - \frac{1}{2} (2(p - q))^2</script><p>由于</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-         & \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta),\\\\
-        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
-\end{aligned}</script><p>问题 (A) 的 Lagrange 对偶问题可以写为如下形式</p>
+\frac{\partial f}{\partial q} = -(p - q) \left( \frac{1}{q(1 - q)} - 4 \right) \leq 0</script><p>而且当 $p=q$ 时，有 $f=0$ ，可以得到当 $q \leq p$ 时，$f(p,q) \geq 0$ ，因此对于这种特殊情形，我们有 $D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2$ </p>
+<p>一般情形：<br>设 $P$ 和 $Q$ 是 $U$ 上的分布.令 $A \subset U$ 为</p>
+<script type="math/tex; mode=display">A = \{ x \mid p(x) \geq q(x) \}</script><p>定义 $P_A$ 和 $Q_A$ 如下：</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-         & \mathop{\max}\limits_{\beta}\mathop{\min}\limits_{x}  L(x,\beta),\\\\
-        &x_i \in \mathcal{F}_i, i = 1, \cdots, n
-\end{aligned}</script><p>由弱对偶性可以得到，对满足约束 $x_i \in \mathcal{F}_i, i = 1, \cdots, n$ 的 $x$ 有</p>
+P_A = \begin{cases} 
+1 & \text{w.p.} \sum_{x \in A} p(x) \\
+0 & \text{w.p.} \sum_{x \notin A} p(x)
+\end{cases}</script><script type="math/tex; mode=display">
+Q_A = \begin{cases} 
+1 & \text{w.p.} \sum_{x \in A} q(x) \\
+0 & \text{w.p.} \sum_{x \notin A} q(x)
+\end{cases}</script><p>那么，</p>
+<script type="math/tex; mode=display">\begin{aligned}
+\|P - Q\|_1 &= \sum_x |p(x) - q(x)| \\\\
+ &= \sum_{x \in A} (p(x) - q(x)) + \sum_{x \notin A} (q(x) - p(x)) \\\\\
+ &= \left| \sum_{x \in A} p(x) - \sum_{x \in A} q(x) \right| + \left| \left( 1 - \sum_{x \in A} p(x) \right) - \left( 1 - \sum_{x \in A} q(x) \right) \right| \\\\
+ \|P - Q\|_1 &= \|P_A - Q_A\|_1 
+\end{aligned}
+\tag{3}</script><p>定义随机变量 </p>
 <script type="math/tex; mode=display">
-          \mathop{\max}\limits_{\beta}\mathop{\min}\limits_{x}  L(x,\beta) \leq \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta)</script><p>问题 (B) 的最优值的最大值小于问题 (A) 的最优值，因此只需证明对于问题 (B) 的最优解，存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的最优解都满足问题 (A) 的约束条件即可。</p>
-<p>记 $S$ 为 $g(x) = 0$ 的解集，则当 $\mathop{\min}\limits_{x \in S} f(x) \leq \mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p$ 时，问题 (B) 的最优解 $x^\ast \in S$，即 $x^\ast$ 满足问题 (A) 的约束条件。<br>由 $\mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p$，只需 $\mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \in S} f(x)$ 即可，由函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负解出</p>
+Z = \begin{cases} 
+1 & \text{if } x \in A \\
+0 & \text{if } x \notin A
+\end{cases}</script><p>假设原来的概率分布 $P$ 和 $Q$ 的多元随机变量定义为 $X$，这里拼接新的一个维度，即将随机变量变为 $(X,Z)$，但根据 $Z$ 的定义，$Z$ 和概率分布 $P$，$Q$ 的取值都取决于$X$，新的随机变量 $(X,Z)$ 并不会影响原有的概率分布。<br>由公式(2) $ D_{KL}(P || Q) = D_{KL}(P(Z) || Q(Z)) + \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(X|Z) | Q(X|Z))] $<br>由于 $ D_{KL}(P(Z) || Q(Z)) = D_{KL}(P_A || Q_A) $ 且 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(X|Z) | Q(X|Z))] \geq 0 $, 我们有</p>
+<script type="math/tex; mode=display">\begin{aligned}
+D_{KL}(P || Q) & \geq D_{KL}(P_A || Q_A) \\\\
+& \geq \frac{1}{2} \| P_A - Q_A \|_1^2 \quad \text{(特殊情形)} \\\\
+&= \frac{1}{2} \| P - Q \|_1^2 \quad \text{(由公式 3)}
+\end{aligned}</script><p>这里给出对 $ \mathbb{E}_{Z \thicksim P(Z)}[D_{\text{KL}}(P(Y|Z) | Q(Y|Z))] \geq 0 $ 的补充证明</p>
+<p><strong>$Proof.$</strong><br>只需证明 KL 散度的非负性即可，由 Jensen 不等式</p>
+<script type="math/tex; mode=display">\begin{aligned}
+D_{KL}(P||Q)&=\sum_{\mathbf{x}} p(\mathbf{x}) (-\log \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
+&\geq -log(\sum_{\mathbf{x}}p(\mathbf{x}) \frac{q(\mathbf{x})}{p(\mathbf{x})}) \\\\
+&=-log(1) = 0
+\end{aligned}</script><h2 id="负熵函数的强凸性"><a href="#负熵函数的强凸性" class="headerlink" title="负熵函数的强凸性"></a>负熵函数的强凸性</h2><p>Mirror Descent 中的 Bregman 距离定义如下：</p>
 <script type="math/tex; mode=display">
-\beta \geq \bar{\beta} = \cfrac{\mathop{\min}\limits_{x \in S} f(x)-\mathop{\min}\limits_{x \notin S} f(x)}{\mathop{\min}\limits_{x \notin S} {g}(x)^\top \mathbf{1}_p}</script><p>显然问题 (B) 的极点最优解属于其最优解，故存在这样一个 $\bar{\beta}$ 使得问题 (B) 的极点最优解都是问题 (A) 的最优解。</p>
-<p>(3) <strong>$Proof.$</strong><br>取 $\tilde{\beta} = \bar{\beta}$，由 (2) 可知，当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解都是问题 (A) 的最优解，下面只需要证明问题 (A) 的最优解都是问题 (B) 的最优解即可。<br>由函数 $ \mathbf{g} $ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，可得</p>
-<script type="math/tex; mode=display">
-\mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x} f(x)</script><p>且当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解满足问题 (A) 的最优解的约束条件，即问题 (A) 的最优解和问题 (B) 的最优解满足相同的约束条件，故问题 (A) 的最优解一定小于等于问题 (B) 的最优解，故问题 (A) 的最优解都是问题 (B) 的最优解。</p>
-<p>综上所述，存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同。</p>
+D(x,y)=f(x)-f(y)-\langle \nabla f(y), x - y \rangle</script><p>若此处的 $f(x) = \sum_{i=1}^n x_i \log x_i $，那么这里的 $D(x,y)$ 就是 $D_{KL}(x || y)$，下面给出负熵函数强凸性的证明：<br><strong>$Proof.$</strong><br>令 $f(x) = \sum_{i=1}^n x_i \log x_i $</p>
+<script type="math/tex; mode=display">\begin{aligned}
+f(x) &= f(y) + \langle \nabla f(y), x - y \rangle + D_{KL}(x || y) \quad \\\\
+&\geq f(y) + \langle \nabla f(y), x - y \rangle + \frac{1}{2} \|x - y\|_1^2 \quad 
+\end{aligned}</script><p>由强凸函数的性质，可以得到负熵函数 $f$ 在 $1$ 范数的意义下是强凸的。</p>
 ]]></content>
       <categories>
         <category>Mathematics</category>
       </categories>
       <tags>
-        <tag>Linear Programming</tag>
-        <tag>Duality Theory</tag>
+        <tag>Probability Inequality</tag>
+        <tag>Strong-Convexity</tag>
+        <tag>KL Divergence</tag>
       </tags>
   </entry>
 </search>
