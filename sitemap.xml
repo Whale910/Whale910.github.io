@@ -141,20 +141,6 @@
   </url>
   
   <url>
-    <loc>http://whale0910.top/tags/Linear-Programming/</loc>
-    <lastmod>2024-07-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://whale0910.top/tags/Duality-Theory/</loc>
-    <lastmod>2024-07-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://whale0910.top/tags/Matrix-Theory/</loc>
     <lastmod>2024-07-24</lastmod>
     <changefreq>weekly</changefreq>
@@ -175,10 +161,24 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>http://whale0910.top/tags/Linear-Programming/</loc>
+    <lastmod>2024-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://whale0910.top/tags/Duality-Theory/</loc>
+    <lastmod>2024-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
-    <loc>http://whale0910.top/categories/Mathematics/</loc>
+    <loc>http://whale0910.top/categories/Machine-Learning/</loc>
     <lastmod>2024-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -186,6 +186,13 @@
   
   <url>
     <loc>http://whale0910.top/categories/Optimization/</loc>
+    <lastmod>2024-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://whale0910.top/categories/Mathematics/</loc>
     <lastmod>2024-07-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

@@ -29,7 +29,7 @@ D_{\text{KL}}(\hat{p}_{\text{data}} \parallel p_{\text{model}}) = \mathbb{E}_{x 
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>理想情况下，我们希望用经验分布 $\hat{p}_{\text{data}}$ 匹配真实的数据生成分布 $p_{\text{data}}$，但由于我们没法直接知道这个分布，因此使用极大似然估计的思想，用经验分布 $\hat{p}_{\text{data}}$ 去匹配模型分布 $p_{\text{model}}$.</p>
 ]]></content>
       <categories>
-        <category>Mathematics</category>
+        <category>Machine Learning</category>
       </categories>
       <tags>
         <tag>KL Divergence</tag>
