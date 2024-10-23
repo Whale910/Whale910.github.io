@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-whale-48.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Motivation1.将数据维度降低到二维或者三维以便将其可视化.  .qsevnjofbihe{}   2.去噪，如果数据中存在噪声，用更少的解释变量来表示，舍弃某些变量有时可以起到去噪的效果. 3.降低数据的多重共线性的影响，考虑下面这样一组数据，其中一列表示用户的工作，另一列表示用户的薪水。但工作和薪水这样两个变量之间可能存在高度的相关性，可能会导致模型参数估计不准确，而PCA是通过对解释">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Principal Component Analysis">
+<meta property="og:url" content="http://example.com/2024/10/07/PCA/index.html">
+<meta property="og:site_name" content="Whale&#39;s Blog">
+<meta property="og:description" content="Motivation1.将数据维度降低到二维或者三维以便将其可视化.  .qsevnjofbihe{}   2.去噪，如果数据中存在噪声，用更少的解释变量来表示，舍弃某些变量有时可以起到去噪的效果. 3.降低数据的多重共线性的影响，考虑下面这样一组数据，其中一列表示用户的工作，另一列表示用户的薪水。但工作和薪水这样两个变量之间可能存在高度的相关性，可能会导致模型参数估计不准确，而PCA是通过对解释">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/10/07/PCA/2.png">
+<meta property="og:image" content="http://example.com/2024/10/07/PCA/1.png">
+<meta property="og:image" content="http://example.com/2024/10/07/PCA/3.jpg">
+<meta property="article:published_time" content="2024-10-07T13:50:08.000Z">
+<meta property="article:modified_time" content="2024-10-23T15:56:33.215Z">
+<meta property="article:author" content="Whale">
+<meta property="article:tag" content="Matrix Theory">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/10/07/PCA/2.png">
+
+<link rel="canonical" href="http://example.com/2024/10/07/PCA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Principal Component Analysis | Whale's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Whale's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下阶段所学(Machine Learning, Optimization, Mathematics, etc)，吐槽一下生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/07/PCA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Principal Component Analysis
+        </h1>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-23 23:56:33" itemprop="dateModified" datetime="2024-10-23T23:56:33+08:00">2024-10-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/10/07/PCA/" class="post-meta-item leancloud_visitors" data-flag-title="Principal Component Analysis" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/10/07/PCA/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/10/07/PCA/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>1.将数据维度降低到二维或者三维以便将其可视化.</p>
+<div align=center>
+<style>.qsevnjofbihe{}</style><img src="/2024/10/07/PCA/2.png" class="qsevnjofbihe">
+</div>
+
+<p>2.去噪，如果数据中存在噪声，用更少的解释变量来表示，舍弃某些变量有时可以起到去噪的效果.</p>
+<p>3.降低数据的多重共线性的影响，考虑下面这样一组数据，其中一列表示用户的工作，另一列表示用户的薪水。但工作和薪水这样两个变量之间可能存在高度的相关性，可能会导致模型参数估计不准确，而PCA是通过对解释变量进行线性变换形成新的一组基，并使新的基之间的相关系数为0，因此PCA可以有效的降低多重共线性的影响.</p>
+<p>4.维度灾难，涉及到向量的计算的问题中，随着维数的增加，计算量呈指数倍增长的一种现象，在很多机器学习问题中，训练集中的每条数据经常伴随着上千、甚至上万个特征，因此降维是比较有效的一种数据预处理方法.</p>
+<p>另一种说法的维度灾难是指，高维空间中数据的分布更加稀疏，想要对数据进行有效地分类更加困难，考虑下面这个例子：</p>
+<p>考虑这样一个球壳，外部球体的半径为 $r_{out}=1$，内部球体的半径为 $r_{in}=1-\varepsilon$.</p>
+<p>考虑维度 $\text{dim}=2$ 的情形，此时有 $V_{out}=\pi r_{out}^2$，$V_{in}=\pi r_{in}^2$.</p>
+<p>考虑维度 $\text{dim}=n$ 的情形，此时的体积表达式如下：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+V_{out}=k r_{out}^n\\
+V_{in}=k r_{in}^n
+\end{cases}</script><p>其中 $k$ 为一个常数，考虑</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\lim_{n \to +\infty} \dfrac{V_{out}-V_{in}}{V_{out}} \\
+= &\lim_{n \to +\infty} \dfrac{k(1-(1-\varepsilon)^n)}{k} \\
+= & 1
+\end{aligned}</script><p>可以发现当维度很高的时候，球壳的几乎占据了整个球体，意味着无论这个 $\varepsilon$ 有多小，数据几乎都分布在这个球壳当中，而中间空着的部分分布着极少的数据，因此高维空间中数据的分布通常更加稀疏.</p>
+<div align=center>
+<style>.ojaucxybvqoj{}</style><img src="/2024/10/07/PCA/1.png" class="ojaucxybvqoj">
+</div>
+
+<span id="more"></span>
+<h2 id="Principal-Component-Analysis"><a href="#Principal-Component-Analysis" class="headerlink" title="Principal Component Analysis"></a>Principal Component Analysis</h2><p>主成分分析的本质，是对给定数据的坐标系进行线性变换，将数据投影到新的坐标系中.</p>
+<p>假设 $\mathbf{x}=(x_1,x_2,\cdots,x_m)^\text{T}$ 为 $m$ 维随机变量，记线性变换后得到的随机变量为 $\mathbf{y}=(y_1,y_2,\cdots,y_m)^\text{T}$，线性变换的矩阵为</p>
+<script type="math/tex; mode=display">A=\begin{bmatrix}
+{a_{11}}&{a_{12}}&{\cdots}&{a_{1m}}\\
+{a_{21}}&{a_{22}}&{\cdots}&{a_{2m}}\\
+{\vdots}&{\vdots}&{\ddots}&{\vdots}\\
+{a_{m1}}&{a_{m2}}&{\cdots}&{a_{mm}}\\
+\end{bmatrix}</script><p>该线性变换表示为</p>
+<script type="math/tex; mode=display">
+\mathbf{y} = A \mathbf{x}</script><p>PCA 的示意图如下：</p>
+<div align=center>
+<style>.phnyoizgwixm{}</style><img src="/2024/10/07/PCA/3.jpg" class="phnyoizgwixm">
+</div>
+
+<p>记 </p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\Sigma &= cov(\mathbf{x},\mathbf{x}) \\
+&=\begin{bmatrix}
+{cov(x_1,x_1)}&{cov(x_1,x_2)}&{\cdots}&{cov(x_1,x_m)}\\
+{cov(x_2,x_1)}&{cov(x_2,x_2)}&{\cdots}&{cov(x_2,x_m)}\\
+{\vdots}&{\vdots}&{\ddots}&{\vdots}\\
+{cov(x_m,x_1)}&{cov(x_m,x_2)}&{\cdots}&{cov(x_m,x_m)}\\
+\end{bmatrix}
+\end{aligned}</script><p>主成分分析的性质如下：</p>
+<p>(1) 矩阵 $A$ 为正交矩阵，即 $AA^\text{T}=A^\text{T}A=I$</p>
+<p>(2) $cov(y_i,y_j)=0(i\neq j)$</p>
+<p>(3) 变量 $y_1$ 是 $\mathbf{x}$ 的所有线性变换中方差最大的；$y_2$ 是与 $y_1$ 不相关的 $\mathbf{x}$ 的所有线性变换中方差最大的，以此类推，$y_i$ 是与 $y_1, y_2, \dots, y_{i-1}$($i = 1, 2, \dots, m$) 都不相关的 $\mathbf{x}$ 的所有线性变换中方差最大的，称 $y_1, y_2, \dots, y_m$ 为 $\mathbf{x}$ 的第一主成分，第二主成分，…… ，第 $m$ 主成分</p>
+<p>性质 (1) 要求线性变换的矩阵 $A$ 为正交矩阵，而正交变换下内积大小不变，即意味着样本点间的距离，范数，夹角等不会发生变化，因此要求该线性变换为正交变换可以有效的保持样本点的几何性质，同时正交变换下，得到的新的坐标系的坐标轴仍是相互正交的.</p>
+<p>性质 (2) 要求正交变换后的 $y_i$ 和 $y_j$ 之间的协方差为 $0$，减少新的基下，基之间的相关性性，这一点可以有效地降低多重共线性的影响.</p>
+<p>性质 (3) 要求方差最大的为第一主成分，某一维的方差是所有样本到该维度坐标原点的距离平方和，方差越大表明在该坐标轴上分布越广，信息量越多.考虑一组数据全部相等的情况，这组数据方差为 $0$，由于数值均相同，这组数据对回归分类等任务没有意义，故这组数据包含的信息量极少.因此选择方差第一大，第二大的作为第一，第二主成分是合理的.</p>
+<p>下面给出主成分分析的求解方法的推导</p>
+<p>计算变换后的协方差矩阵 $cov(\mathbf{y},\mathbf{y})=cov(A\mathbf{x},A\mathbf{x})=A\Sigma A^\text{T}$</p>
+<p>对矩阵 $A$ 进行行分块</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix} \alpha_1^\text{T} \\ \alpha_2^\text{T} \\ \vdots \\ \alpha_m^\text{T} \end{bmatrix}</script><p>下面求解最大的方差，由 $cov(y_1,y_1)=[A\Sigma A]_{11}=\alpha_1^\text{T}\Sigma \alpha_1$，可以得到下面的最优化问题</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         
+\min_{\alpha_1} & \quad \alpha_1^\text{T}\Sigma \alpha_1\\
+\text{s.t.} \quad &\alpha_1^\text{T}\alpha_1 =1\\
+\end{aligned}</script><p>那么可以得到它的广义拉格朗日函数</p>
+<script type="math/tex; mode=display">
+L( \alpha_1, \lambda) = \alpha_1^\text{T}\Sigma \alpha_1 - \lambda(\alpha_1^\text{T}\alpha_1 -1)</script><p>显然该问题是满足 Slater 条件的凸优化问题，故求它的 KKT 条件，令梯度为 $0$ 可得</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+  \dfrac{\partial L}{\partial \alpha_1} = 2\Sigma \alpha_1 - 2\lambda \alpha_1 = 0 \\
+  \alpha_1^\text{T}\alpha_1 =1
+\end{cases}</script><p>因此 $\lambda$ 为 $\Sigma$ 的特征值，$\alpha_1$ 为对应的特征向量，此时有</p>
+<script type="math/tex; mode=display">
+\alpha_1^\text{T}\Sigma \alpha_1= \alpha_1^\text{T}\lambda \alpha_1 = \lambda</script><p>由于我们要求最大的特征值，因此求解第一主成分等价于求解最大的特征值 $\lambda$ 对应的特征向量 $\alpha_1$，第一主成分 $y_1=\alpha_1^\text{T}x$.</p>
+<p>下面求解第二大的方差，由 $cov(y_2,y_2)=[A\Sigma A]_{22}=\alpha_2^\text{T}\Sigma \alpha_2$，可以得到下面的最优化问题</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         
+\min_{\alpha_2} & \quad \alpha_2^\text{T}\Sigma \alpha_2\\
+\text{s.t.} \quad &\alpha_2^\text{T}\alpha_2 =1\\
+\quad &\alpha_2^\text{T}\Sigma\alpha_1 =0 (由cov(y_2,y_1)=0)\\
+\quad &\alpha_1^\text{T}\Sigma\alpha_2 =0 (由cov(y_1,y_2)=0)\\
+\end{aligned}</script><p>那么可以得到它的广义拉格朗日函数</p>
+<script type="math/tex; mode=display">
+L(\alpha_2, \mu) = \alpha_2^\text{T}\Sigma \alpha_2 - \mu_1(\alpha_2^\text{T}\alpha_2 -1)-\mu_2 \alpha_2^\text{T} \Sigma \alpha_1 - \mu_3 \alpha_1^\text{T} \Sigma \alpha_2 =0</script><p>显然该问题是满足 Slater 条件的凸优化问题，故求它的 KKT 条件，令梯度为 $0$ 可得</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+  \dfrac{\partial L}{\partial \alpha_2} = 2\Sigma \alpha_2 - 2\mu_1 \alpha_2 - \mu_2 \Sigma \alpha_1 -\mu_3 \Sigma^\text{T} \alpha_1 = 0 \\
+  \alpha_2^\text{T}\alpha_2 =1 \\
+  \alpha_2^\text{T}\Sigma\alpha_1 =0 \\
+  \alpha_1^\text{T}\Sigma\alpha_2 =0 \\
+\end{cases}</script><p>化简可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  &2\Sigma \alpha_2 - 2\mu_1 \alpha_2 - \mu_2 \Sigma \alpha_1 -\mu_3 \Sigma^\text{T} \alpha_1\\
+  =&2\Sigma \alpha_2 - 2\mu_1 \alpha_2 - \mu_2 \lambda \alpha_1 -\mu_3 \lambda \alpha_1(\Sigma = \Sigma^\text{T})\\
+\end{aligned}</script><p>左乘 $\alpha_1^\text{T}$，由 $\alpha_1^\text{T}\Sigma\alpha_2 =0$ 和 $\alpha_1^\text{T}\alpha_2 =0$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned} 
+  &2\alpha_1^\text{T} \Sigma \alpha_2 - 2\mu_1 \alpha_1^\text{T} \alpha_2 - \mu_2 \lambda \alpha_1^\text{T} \alpha_1 -\mu_3 \lambda \alpha_1^\text{T} \alpha_1\\
+  =&- \mu_2 \lambda \alpha_1^\text{T} \alpha_1 -\mu_3 \lambda \alpha_1^\text{T} \alpha_1 \\
+  =&- \mu_2 \lambda -\mu_3 \lambda =0
+\end{aligned}</script><p>故</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  &2\Sigma \alpha_2 - 2\mu_1 \alpha_2 - \mu_2 \Sigma \alpha_1 -\mu_3 \Sigma^\text{T} \alpha_1\\
+  =&2\Sigma \alpha_2 - 2\mu_1 \alpha_2 - \mu_2 \lambda \alpha_1 -\mu_3 \lambda \alpha_1\\
+  =&2\Sigma \alpha_2 - 2\mu_1 \alpha_2\\
+  =&0
+\end{aligned}</script><p>因此 $\mu_1$ 为 $\Sigma$ 的特征值，$\alpha_2$ 为对应的特征向量，此时有</p>
+<script type="math/tex; mode=display">
+\alpha_2^\text{T}\Sigma \alpha_2= \alpha_2^\text{T}\mu_1 \alpha_2 = \mu_1</script><p>由于我们要求最大的特征值，因此求解第二主成分等价于求解第二大的特征值 $\mu_1$ 对应的特征向量 $\alpha_2$，第二主成分 $y_2=\alpha_2^\text{T}x$.</p>
+<p>同理，第三主成分，第四主成分等价于求解第三，第四大的特征值和其对应的特征向量，由此可以求解正交矩阵 $A$，也就可以解得主成分分析，主成分的个数选取可以参考方差贡献率，定义如下</p>
+<p>第 $k$ 主成分 $y_k$ 的方差贡献率定义为 $y_k$ 的方差与所有方差之和的比，记作 $\eta_k$：</p>
+<script type="math/tex; mode=display">
+\eta_k = \frac{\lambda_k}{\sum_{i=1}^{m} \lambda_i}</script><p>$k$ 个主成分 $y_1, y_2, \dots, y_k$ 的累计方差贡献率定义为 $k$ 个方差之和与所有方差之和的比：</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^{k} \eta_i = \frac{\sum_{i=1}^{k} \lambda_i}{\sum_{i=1}^{m} \lambda_i}</script><p>通常取 $k$ 使得累计方差贡献率达到规定的百分比以上，累计方差贡献率反映了主成分保留信息的比例.</p>
+<p>接下来从最大投影方差和最小重构代价的角度给出主成分分析的求解方法的推导</p>
+<p>设样本数据表示为</p>
+<script type="math/tex; mode=display">
+X = \begin{bmatrix}
+x_1^{(1)} & x_1^{(2)} & x_1^{(3)} & \dots & x_1^{(n)} \\
+x_2^{(1)} & x_2^{(2)} & x_2^{(3)} & \dots & x_2^{(n)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+x_m^{(1)} & x_m^{(2)} & x_m^{(3)} & \dots & x_m^{(n)}
+\end{bmatrix}</script><p>其中 $m$ 表示数据量，$n$ 表示数据维数.</p>
+<p>下面给出样本均值和样本协方差的矩阵形式</p>
+<p>样本均值:</p>
+<script type="math/tex; mode=display">
+\bar{x} = \frac{1}{m} \sum_{i=1}^{m} x_i = \frac{1}{m}
+\begin{bmatrix}
+x_1 & x_2 & \dots & x_m
+\end{bmatrix}
+= \frac{1}{m} X^T 1_m</script><p>样本协方差:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+S &= \frac{1}{m} \sum_{i=1}^{m} (x_i - \bar{x})(x_i - \bar{x})^\text{T} \\
+&= \frac{1}{m} \left( \left[ x_1 \quad x_2 \quad \dots \quad x_m \right] - \bar{x} \left[ 1 \quad 1 \quad \dots \quad 1 \right] \right) \left( \begin{bmatrix} x_1^\text{T} \\ x_2^\text{T} \\ \vdots \\ x_m^\text{T} \end{bmatrix} - \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix} \bar{x}^\text{T} \right) \\
+&= \left( X^\text{T} - \frac{1}{m}X^\text{T} 1_m 1_m^\text{T} \right) \left( X^\text{T} - \frac{1}{m} X^\text{T} 1_m 1_m^\text{T} \right)^\text{T} \\
+&= \frac{1}{m} X^\text{T} \left( I_m - \frac{1}{m} 1_m 1_m^\text{T} \right) \left( I_m - \frac{1}{m} 1_m 1_m^\text{T} \right)^\text{T} X \\
+&= \frac{1}{m} X^\text{T} HH^\text{T} X
+\end{aligned}</script><p>下面给出矩阵 $H$ 的两个性质，矩阵 $H$ 为对称阵和幂等矩阵$(H^n=H)$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  H^\text{T} &= (I_m - \frac{1}{m} 1_m 1_m^\text{T})^\text{T}\\
+  &=I_m - \frac{1}{m} 1_m 1_m^\text{T} = H
+\end{aligned}</script><script type="math/tex; mode=display">
+\begin{aligned}
+  HH^T &= (I_m - \frac{1}{m} 1_m 1_m^\text{T})(I_m - \frac{1}{m} 1_m 1_m^\text{T})\\
+  &= I_m - \frac{2}{m} 1_m 1_m^\text{T} + \frac{1}{m^2} 1_m 1_m^\text{T} 1_m 1_m^\text{T} \\
+  &= I_m - \frac{2}{m} 1_m 1_m^\text{T} + \frac{1}{m^2} m 1_m 1_m^\text{T}\\
+  &= I_m - \frac{1}{m} 1_m 1_m^\text{T} = H
+\end{aligned}</script><p>这里 $H$ 称为中心化矩阵，左乘 $H$ 相当于将数据减去均值，由 $H$ 的性质有</p>
+<script type="math/tex; mode=display">
+S= \frac{1}{m} X^\text{T} HX</script><p>我们希望样本点在重构后的空间中的投影点可以尽可能的分离，即希望方差尽可能大，称为最大可分性、最大投影方差.</p>
+<p>设我们所求的第一主成分方向的单位向量为 $u_1$，那么 $x_i-\bar{x}$ 在 $u_1$ 的投影可以表示为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  &\|x_i-\bar{x}\|\cos\theta \\
+  =&\|x_i-\bar{x}\|\|u_1\|\cos\theta \\
+  =& \langle x_i-\bar{x},u_1 \rangle \\
+  =& (x_i - \bar{x})^\text{T}u_1
+\end{aligned}</script><p>那么目标函数为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  J(u_1) = \frac{1}{m} \sum_{i=1}^{m} (x_i - \bar{x})^\text{T} u_1 )^2
+\end{aligned}</script><p>化简得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  J(u_1) &= \frac{1}{m} \sum_{i=1}^{m} (x_i - \bar{x})^\text{T} u_1 )^2\\
+  &=\frac{1}{m} \sum_{i=1}^{m} (u_1^\text{T} (x_i - \bar{x}) (x_i - \bar{x})^\text{T} u_1)\\
+  &= u_1^\text{T} (\sum_{i=1}^{m} \frac{1}{m} ((x_i - \bar{x}) (x_i - \bar{x})^\text{T})) u_1\\
+  &= u_1^\text{T} S u_1
+\end{aligned}</script><p>同时有约束条件</p>
+<script type="math/tex; mode=display">
+u_1^\text{T} u_1 = 1</script><p>由此可以得到和上面最优化问题相同的形式，可以采用相同的方法求解对于 $u_2,\cdots,u_m$ 同理.</p>
+<p>我们希望样本点在重构后的空间中距离坐标轴的距离尽可能小，即可以以最小代价将投影后的数据重构回去，称为最近重构性、最小重构误差.</p>
+<p>设重构后的空间的各个坐标轴方向的单位向量分别为</p>
+<script type="math/tex; mode=display">
+u_1, \ u_2, \dots, \ u_n</script><p>那么每个样本 $x_i$ 可以表示为</p>
+<script type="math/tex; mode=display">
+x_i = \bar{x}+\sum_{k=1}^n((x_i-\bar{x})^\text{T}u_k)u_k</script><p>取其中的 $p$ 个主成分得到投影到这 $p$ 个主成分上的数据</p>
+<script type="math/tex; mode=display">
+\hat{x}_i = \bar{x}+\sum_{k=1}^p((x_i-\bar{x})^\text{T}u_k)u_k</script><p>那么可以得到目标函数</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  &\dfrac{1}{m}\sum_{i=1}^m\|x_i-\hat{x}_i\|^2\\
+  =&\dfrac{1}{m}\sum_{i=1}^m\|\sum_{k=p+1}^n((x_i-\bar{x})^\text{T}u_k)u_k\|^2\\
+  =&\dfrac{1}{m}\sum_{i=1}^m\sum_{k=p+1}^n((x_i-\bar{x})^\text{T}u_k)^2\\
+  =&\sum_{k=p+1}^n\sum_{i=1}^m\dfrac{1}{m}((x_i-\bar{x})^\text{T}u_k)^2\\
+  =&\sum_{k=p+1}^n u_k^\text{T}S u_k
+\end{aligned}</script><p>第二个等式成立的原因如下，记 $c_k=((x_i-\bar{x})^\text{T}u_k)$，那么</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  &\|\sum_{k=p+1}^n((x_i-\bar{x})^\text{T}u_k)u_k\|^2\\
+  =&\langle c_{p+1}u_{p+1}+c_{p+2}u_{p+2}+\cdots+c_nu_n,c_{p+1}u_{p+1}+c_{p+2}u_{p+2}+\cdots+c_nu_n\rangle\\
+  =&\sum_{k=p+1}^n\langle c_{k}u_{k},c_{k}u_{k}\rangle\\
+  =&\sum_{k=p+1}^n c_k^2\\
+  =&\sum_{k=p+1}^n ((x_i-\bar{x})^\text{T}u_k)^2\\
+\end{aligned}</script><p>由此我们可以得到下面的最优化问题</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         
+\min_{u_k} &  \sum_{k=p+1}^{n} (u_k)^T S u_k\\
+&\text{s.t.} \quad u_k^\text{T} u_k = 1\\
+\end{aligned}</script><p>使用拉格朗日乘子法，我们有</p>
+<script type="math/tex; mode=display">
+L(u_k, \lambda) = \sum_{k=p+1}^{n} (u_k)^T S u_k + \sum_{k=p+1}^{n}\lambda_k(1 - u_k^T u_k)</script><p>对 $u_k$ 求导数</p>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial u_k} L(u_k, \lambda) = 2 S u_k - 2 \lambda u_k = 0</script><p>得到</p>
+<script type="math/tex; mode=display">
+S u_k = \lambda u_k</script><p>其中，$u_k$ 是单位特征向量，$\lambda$ 是特征值，因此目标函数变为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         
+\min &  \sum_{k=p+1}^{n} \lambda_k\\
+\end{aligned}</script><p>即非主成分的特征值从最小的开选，也就意味着选取的 $p$ 个主成分是特征值最大的 $p$ 个主成分，和上面采用其他方法分析得到的结果一致.</p>
+<p>下面给出计算主成分分析的两种方法</p>
+<p>由于 $S$ 是实对称矩阵，我们可以采用特征值分解（EVD）：</p>
+<script type="math/tex; mode=display">
+S = Q \Lambda Q^T</script><p>其中，$\Lambda$ 是对角矩阵，且 $Q^T Q = I$，$Q$ 是由 $S$ 的特征向量拼成的.</p>
+<p>另一种方法是利用奇异值分解</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  S &= X^\text{T} H H^\text{T} X \\
+  &= X^\text{T} H H^\text{T} X
+\end{aligned}</script><p>对 $HX$ 进行奇异值分解</p>
+<script type="math/tex; mode=display">
+HX = U \Sigma V^\text{T}</script><p>其中，$\Sigma$ 是对角矩阵，$U^\text{T} U = I, V^\text{T} V = I$。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+  S &= X^\text{T} H H^\text{T} X\\
+  &= (U \Sigma V^\text{T})^\text{T} U \Sigma V^\text{T}\\
+  &= V \Sigma^\text{T} U^\text{T} U \Sigma V^\text{T}\\
+  &= V \Sigma^2 V^\text{T}
+\end{aligned}</script><p>由此可以得到特征值为 $\Sigma^2$ 的对角元素，即 $S$ 的特征值，$V$ 由 $S$ 的特征向量拼成.</p>
+<h2 id="Singular-Value-Decomposition"><a href="#Singular-Value-Decomposition" class="headerlink" title="Singular Value Decomposition"></a>Singular Value Decomposition</h2><p>矩阵的奇异值分解(SVD)是将非零实矩阵 $A \in \mathbb{R}^{m \times n}$ 分解为如下形式：</p>
+<script type="math/tex; mode=display">
+A = U \Sigma V^\text{T}</script><p>其中 $U$ 是 $m$ 阶正交矩阵，$V$ 是 $n$ 阶正交矩阵，$\Sigma$ 是由 $A$ 的奇异值($\sigma_i = \sqrt{\lambda_i(A^\text{T}A)}$)降序排列组成的 $m \times n$ 矩形对角矩阵，且满足</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+UU^\text{T}=I\\
+VV^\text{T}=I\\
+\Sigma=diag(\sigma_1,\sigma_2,\cdots,\sigma_p)\\
+\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_p \geq 0\\
+p = min(m,n)
+\end{cases}</script><p>并且 $U$ 的列向量称为左奇异向量，$V$ 的列向量称为右奇异向量.</p>
+<p>下面给出奇异值分解的计算形式：</p>
+<p>(1) 首先求 $A^T A$ 的特征值和特征向量</p>
+<p>计算矩阵 $W = A^T A$。<br>求解特征方程：</p>
+<script type="math/tex; mode=display">
+(W - \lambda I)x = 0</script><p>得到特征值 $\lambda_i$，并将特征值由大到小排列：</p>
+<script type="math/tex; mode=display">
+\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_n \geq 0</script><p>将特征值 $\lambda_i (i=1, 2, \dots, n)$ 代入特征方程求得对应的特征向量。</p>
+<p>(2) 求 $n$ 阶正交矩阵 $V$ </p>
+<p>将特征向量单位化，得到 $v_1, v_2, \cdots, v_n$，构成 $n$ 阶正交矩阵 $V$：</p>
+<script type="math/tex; mode=display">
+V = [v_1, v_2, \dots, v_n]</script><p>(3) 求 $m \times n$ 对角矩阵 $\Sigma$</p>
+<p>计算 $A$ 的奇异值：</p>
+<script type="math/tex; mode=display">
+\sigma_i = \sqrt{\lambda_i}, \quad i = 1, 2, \dots, n</script><p>构造 $m \times n$ 矩形对角矩阵 $\Sigma$，主对角线元素是奇异值，其余元素为零：</p>
+<script type="math/tex; mode=display">
+\Sigma = \text{diag}(\sigma_1, \sigma_2, \dots, \sigma_n)</script><p>(4) 求 $m$ 阶正交矩阵 $U$</p>
+<p>对 $A$ 的前 $r$ 个正奇异值，令</p>
+<script type="math/tex; mode=display">
+u_j = \frac{1}{\sigma_j} A v_j, \quad j = 1, 2, \cdots, r</script><p>得到</p>
+<script type="math/tex; mode=display">
+U_1 = [u_1 \ u_2 \ \cdots \ u_r]</script><p>求 $A^\text{T}$ 的零空间的一组标准正交基 $\{u_{r+1}, u_{r+2}, \dots, u_m\}$，令</p>
+<script type="math/tex; mode=display">
+U_2 = [u_{r+1} \ u_{r+2} \ \dots \ u_m]</script><p>令</p>
+<script type="math/tex; mode=display">
+U = [U_1 \ U_2]</script><p>(5) 得到奇异值分解</p>
+<script type="math/tex; mode=display">
+A = U \Sigma V^\text{T}</script><p>同时奇异值分解的存在性可以通过上述计算过程构造性证明.</p>
+<h2 id="Optimization-View"><a href="#Optimization-View" class="headerlink" title="Optimization View"></a>Optimization View</h2><p>设 $X$ 为数据样本的规范化矩阵，则主成分等价于求解下面的最优化问题：</p>
+<script type="math/tex; mode=display">
+\min_L \|X-L\|_F,</script><script type="math/tex; mode=display">
+\text{s.t.} \quad \text{rank}(L) \leq k</script><p>这里 $k$ 是主成分个数.Frobenius 范数的定义为</p>
+<script type="math/tex; mode=display">
+\|A\| = \sqrt{\sum_{i,j}A_{ij}^2}</script><p><strong>$Proof.$</strong> 首先证明奇异值分解是秩 $k$ 矩阵中对原矩阵的最佳逼近.设奇异值分解的形式为 $A=\sum_1^r\sigma_iu_iv_i^\text{T}$，其中$rank(A) = r$，$\sigma_i$ 按不增排序，现在取奇异值分解中的前 $k$ 项，$A_k=\sum_1^r\sigma_iu_iv_i^\text{T}$.<br>下证，对于任意的秩 $k$ 矩阵 $A’$，都有 $|A-A_k|_F\leq|A-A’|_F$.<br>秩 $1$ 情形：此时问题变成了寻找一个秩 $1$ 矩阵 $\hat{A}=\hat{\sigma}\hat{u}\hat{v}^\text{T}$ 来最小化 $|A-\hat{A}|_F$<br>由</p>
+<script type="math/tex; mode=display">
+\text{Tr}(A^\text{T}A)=\|A\|_F^2</script><p>故，目标函数变为</p>
+<script type="math/tex; mode=display">
+\min_{\hat{A}} \text{Tr}((A-\hat{A})^\text{T}(A-\hat{A}))</script><p>将 $A$ 和 $\hat{A}$ 的奇异值分解形式代入</p>
+<script type="math/tex; mode=display">
+\min_{\hat{\sigma},\hat{u},\hat{v}} \text{Tr}((\sum_{i=1}^r\sigma_iu_iv_i^\text{T}-\hat{\sigma}\hat{u}\hat{v}^\text{T})^\text{T}(\sum_{i=1}^r\sigma_iu_iv_i^\text{T}-\hat{\sigma}\hat{u}\hat{v}^\text{T}))</script><p>展开后可得</p>
+<script type="math/tex; mode=display">
+\min_{\hat{\sigma},\hat{u},\hat{v}} \hat{\sigma}^2-2\hat{\sigma}\text{Tr}(\sum_i\sigma_i(u^\text{T}_i\hat{u})v_i\hat{v}^\text{T})</script><p>由 $\text{Tr}(ABC)=\text{Tr}(BCA)=\text{Tr}(CAB)$，对目标函数进行化简</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\hat{\sigma}^2-2\hat{\sigma}\text{Tr}(\sum_i\sigma_i(u^\text{T}_i\hat{u})v_i\hat{v}^\text{T})\\
+=&\hat{\sigma}^2-2\hat{\sigma}\sum_i(u^\text{T}_i\hat{u})\text{Tr}(\sigma_iv_i\hat{v}^\text{T}) \quad (由于 u^\text{T}_i\hat{u} 是实数) \\
+=&\hat{\sigma}^2-2\hat{\sigma}\sum_i(u^\text{T}_i\hat{u})\text{Tr}(\sigma_i\hat{v}^\text{T}v_i) \\
+=&\hat{\sigma}^2-2\hat{\sigma}\sum_i\sigma_i(u^\text{T}_i\hat{u})(v_i^\text{T}\hat{v}) 
+\end{aligned}</script><p>由此可以得到下面的优化问题</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         
+\min_{\hat{\sigma},\hat{u},\hat{v}} \hat{\sigma}^2-2\hat{\sigma}&\sum_i\sigma_i(u^\text{T}_i\hat{u})(v_i^\text{T}\hat{v})\\
+\text{s.t.} \quad &\hat{u}^\text{T}\hat{u}=1\\
+&\hat{v}^\text{T}\hat{v}=1
+\end{aligned}</script><p>考虑它的广义拉格朗日函数</p>
+<script type="math/tex; mode=display">
+L(\hat{\sigma}, \hat{u}, \hat{v}, \lambda) = \hat{\sigma}^2 - 2 \hat{\sigma} \sum_i \sigma_i (u_i^T \hat{u})(v_i^T \hat{v}) + \lambda_1 (\hat{u}^T \hat{u} - 1) + \lambda_2 (\hat{v}^T \hat{v} - 1)</script><p>先对 $\hat{u}$ 和 $\hat{v}$ 优化，令梯度为0可得</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial \hat{u}} = -2 \hat{\sigma} \sum_i \sigma_i (v_i^T \hat{v}) u_i + 2 \lambda_1 \hat{u} = 0</script><script type="math/tex; mode=display">
+\frac{\partial L}{\partial \hat{v}} = -2 \hat{\sigma} \sum_i \sigma_i (u_i^T \hat{u}) v_i + 2 \lambda_2 \hat{v} = 0</script><p>化简得</p>
+<script type="math/tex; mode=display">
+\hat{\sigma} \sum_i \sigma_i (v_i^T \hat{v}) u_i = \lambda_1 \hat{u}</script><script type="math/tex; mode=display">
+\hat{\sigma} \sum_i \sigma_i (u_i^T \hat{u}) v_i = \lambda_2 \hat{v}</script><p>把下式中的 $\hat{v}$ 代入上式可得：</p>
+<script type="math/tex; mode=display">
+\lambda_1 \lambda_2 \hat{u} = \hat{\sigma}^2 \sum_i \sigma_i^2 (u_i^T \hat{u}) u_i</script><p>两边同时取左乘一个 $A$ 的基向量 $u_k^T$，由于 $u$ 之间的正交性：</p>
+<script type="math/tex; mode=display">
+\lambda_1 \lambda_2 (u_k^\text{T}\hat{u}) = \hat{\sigma}^2 \sum_i \sigma_i^2 (u_i^T \hat{u})(u_k^\text{T}u_i)=\hat{\sigma}^2 \sigma_k^2 (u_k^\text{T} \hat{u})</script><p>该式对任意 $k$ 都成立，而 $\hat{\sigma} &gt; 0，\sigma_k &gt; 0$，若 $\sigma_k$ 各不相同，$u_1, u_2, \dots, u_m$ 是 $A$ 的列空间的一组标准正交基，故不存在这样一个向量 $\hat{u}$ 使得对任意 $k$，有 $u_k^T \hat{u} = 0$，因此对于存在唯一一个 $k’$ 满足 $\lambda_1<br>\lambda_2 = \sigma^2 \sigma_{k’}^2$，其余 $k \neq k’$ 都是因为 $u_k^T \hat{u} = 0$ 才使得式子成立.</p>
+<p>因此 $\hat{u}$ 一定与标准正交基中的一个向量同向，且由于模长为 $1$，存在 $k = t$，使得 $\hat{u} = u_t$，同样对于 $\hat{v}$ 我们有 $\hat{v} = v_t$.</p>
+<p>通过上面的分析，$\hat{u}$ 和 $\hat{v}$ 必然与一组 $u_t$，$v_t$ 相同，代入到原来的目标函数中：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\min_{\hat{\sigma},\hat{u},\hat{v}} \hat{\sigma}^2 - 2\hat{\sigma} \sum_i \sigma_i (u_i^T \hat{u})(v_i^T \hat{v}) \\
+=& \hat{\sigma}^2 - 2 \hat{\sigma} \sigma_t
+\end{aligned}</script><p>显然，此时 $\sigma$ 取最大奇异值 $\sigma_t$ 相应的基向量为 $u_t, v_t$，使目标函数达到最小值 $-\sigma_t^2$.</p>
+<p>由于前面假设了 $\sigma_k$ 各不相同，若存在多个相同的 $\sigma_{k1}, \sigma_{k2}, \cdots, \sigma_{kp}$，仅需要取 $\hat{u}$ 为 $\sigma_{k1}, \sigma_{k2}, \cdots, \sigma_{kp}$ 对应的基向量 $u_{k1}, u_{k2}, \cdots, u_{kp}$ 的线性组合即可，代入到原来的目标函数中可以得到与 $\sigma_k$ 各不相同的情况下进行分析相同的结果.</p>
+<p>上面是对秩 $1$ 的情形分析，对于秩 $k$ 情形，每次寻找一组$(\sigma, \hat{u}, \hat{v})$，寻找第 $l$ 组时必须要与前 $l-1$ 组全部正交，所以在这个式子中：</p>
+<script type="math/tex; mode=display">
+\lambda_1 \lambda_2 \hat{u} = \sigma^2 \sum_i \sigma_i^2 (u_i^T \hat{u}) u_i</script><p>已经选择过的基向量由正交性会自动消掉，最终选择奇异值最小化 $-\sigma_t^2$ 时，每一次都选择剩下的奇异值中最大的那个.</p>
+<p>因此秩 $k$ 情形下选择的就是最大的前 $k$ 个奇异值以及其对应的基向量.</p>
+<p>因此 SVD 等价于秩 $k$ 矩阵的最佳逼近，而 PCA 可以通过 SVD 来完成，故等价于该优化问题的求解过程.</p>
+<h2 id="Probabilistic-PCA"><a href="#Probabilistic-PCA" class="headerlink" title="Probabilistic PCA"></a>Probabilistic PCA</h2>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Whale
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/10/07/PCA/" title="Principal Component Analysis">http://example.com/2024/10/07/PCA/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Matrix-Theory/" rel="tag"><i class="fa fa-tag"></i>Matrix Theory</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" rel="prev" title="KL散度视角下的极大似然估计">
+      <i class="fa fa-chevron-left"></i> KL散度视角下的极大似然估计
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" rel="next" title="矩阵求导">
+      矩阵求导 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Principal-Component-Analysis"><span class="nav-number">2.</span> <span class="nav-text">Principal Component Analysis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Singular-Value-Decomposition"><span class="nav-number">3.</span> <span class="nav-text">Singular Value Decomposition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimization-View"><span class="nav-number">4.</span> <span class="nav-text">Optimization View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Probabilistic-PCA"><span class="nav-number">5.</span> <span class="nav-text">Probabilistic PCA</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Whale"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Whale</p>
+  <div class="site-description" itemprop="description">就读于HDU计算机专业，学的很杂的本科生</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Whale910" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Whale910" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/whalewjy777@163.com" title="E-Mail → whalewjy777@163.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/kan-shi-57-98" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;kan-shi-57-98" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" title="2024&#x2F;10&#x2F;08&#x2F;矩阵求导&#x2F;">矩阵求导</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/07/PCA/" title="2024&#x2F;10&#x2F;07&#x2F;PCA&#x2F;">Principal Component Analysis</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" title="2024&#x2F;07&#x2F;24&#x2F;KL散度视角下的极大似然估计&#x2F;">KL散度视角下的极大似然估计</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/Mirror_Descent/" title="2024&#x2F;07&#x2F;20&#x2F;Mirror_Descent&#x2F;">Mirror Descent</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" title="2024&#x2F;07&#x2F;20&#x2F;2024阿里巴巴数学竞赛决赛应用与计算赛道T2&#x2F;">2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-undefined">
+          <div class="links-of-blogroll-title">
+            <!-- modify icon to fire by szw -->
+            <i class="fa fa-history fa-" aria-hidden="true"></i>
+            
+          </div>
+          <ul class="links-of-blogroll-list">
+            
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+          </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Whale</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'HpAGNqq3x93bEeHtulQGWh5d-gzGzoHsz',
+      appKey     : '1atWGprA9ysYHi56d1cB0X1j',
+      placeholder: "说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

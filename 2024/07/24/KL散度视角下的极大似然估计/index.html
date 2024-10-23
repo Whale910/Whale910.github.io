@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-whale-48.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="极大似然估计假设数据集 $X &#x3D; \{x^{(1)}, x^{(2)}, \dots, x^{(m)}\}$，每个样本独立同分布地由未知的真实数据生成分布 $p_{\text{data}}(x)$ 生成. 设 $p_{\text{model}}(x; \theta)$ 是一个用来估计真实概率 $p_{\text{data}}(x)$ 的映射. 对参数 $\theta$ 的极大似然估计定义如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KL散度视角下的极大似然估计">
+<meta property="og:url" content="http://example.com/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/index.html">
+<meta property="og:site_name" content="Whale&#39;s Blog">
+<meta property="og:description" content="极大似然估计假设数据集 $X &#x3D; \{x^{(1)}, x^{(2)}, \dots, x^{(m)}\}$，每个样本独立同分布地由未知的真实数据生成分布 $p_{\text{data}}(x)$ 生成. 设 $p_{\text{model}}(x; \theta)$ 是一个用来估计真实概率 $p_{\text{data}}(x)$ 的映射. 对参数 $\theta$ 的极大似然估计定义如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-24T03:33:13.000Z">
+<meta property="article:modified_time" content="2024-10-05T06:07:48.521Z">
+<meta property="article:author" content="Whale">
+<meta property="article:tag" content="KL Divergence">
+<meta property="article:tag" content="Maximum Likelihood Estimate">
+<meta property="article:tag" content="Cross Entropy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>KL散度视角下的极大似然估计 | Whale's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Whale's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下阶段所学(Machine Learning, Optimization, Mathematics, etc)，吐槽一下生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          KL散度视角下的极大似然估计
+        </h1>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-05 14:07:48" itemprop="dateModified" datetime="2024-10-05T14:07:48+08:00">2024-10-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" class="post-meta-item leancloud_visitors" data-flag-title="KL散度视角下的极大似然估计" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>假设数据集 $X = \{x^{(1)}, x^{(2)}, \dots, x^{(m)}\}$，每个样本独立同分布地由未知的真实数据生成分布 $p_{\text{data}}(x)$ 生成.</p>
+<p>设 $p_{\text{model}}(x; \theta)$ 是一个用来估计真实概率 $p_{\text{data}}(x)$ 的映射.</p>
+<p>对参数 $\theta$ 的极大似然估计定义如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+            \hat{\theta} &= \arg \max_\theta p_{\text{model}}(X; \theta)\\
+            &= \arg \max_\theta \prod_{i=1}^m p_{\text{model}}(x^{(i)}; \theta)
+\end{aligned}</script><p>由于乘积可能会导致数值溢出等问题，不便于计算，为了得到一个便于计算的等价优化问题，通过取对数转化成便于计算的求和形式：</p>
+<script type="math/tex; mode=display">
+\hat{\theta} = \arg \max_\theta \sum_{i=1}^m \log p_{\text{model}}(x^{(i)}; \theta)</script><p>假设每个数据等概率地从数据集 $X$ 中抽样得到，除以 $m$ 得到训练数据经验分布 $\hat{p}_{\text{data}}$ 的期望形式：</p>
+<script type="math/tex; mode=display">
+\hat{\theta} = \arg \max_\theta \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x; \theta)]</script><span id="more"></span>
+<p>另一种视角下的极大似然估计是将它看作最小化训练集上的经验分布 $\hat{p}_{\text{data}}$ 和模型分布 $p_{\text{model}}$ 之间的差异，两个概率分布之间的差异程度可以通过 KL 散度度量：</p>
+<script type="math/tex; mode=display">
+D_{\text{KL}}(\hat{p}_{\text{data}} \| p_{\text{model}}) = \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log \hat{p}_{\text{data}}(x) - \log p_{\text{model}}(x)]</script><p>左边一项仅涉及到训练集上的数据抽样过程，和模型无关，故上式等价于最小化</p>
+<script type="math/tex; mode=display">
+\mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x)]</script><p>显然这和极大似然估计得到的结果是相同的，同时该式也可以看出最小化 KL 散度与最小化交叉熵等价.</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>均方误差 MSE 等价于经验分布和高斯模型之间的交叉熵，考虑下面这样一个线性回归模型：</p>
+<p>将线性回归作为学习从输入 $x$ 映射到输出 $y$ 的算法，以极大似然估计的视角来看线性回归，现在希望我们的模型能够拟合到条件概率分布 $p(y|x)$，而不是得到一个单独的预测 $\hat{y}$，定义 $p(y|x) = \mathcal{N}(y; \hat{y}(x), \sigma^2)$，即函数 $\hat{y}(x; w)$ 预测高斯的均值，方差是常量。假设这个是独立同分布的，条件对数似然如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\sum_{i=1}^{m} \log p(y^{(i)}|x^{(i)}; \theta)\\
+=& -m \log \sigma - \frac{m}{2} \log (2\pi) - \frac{m}{2} \sum_{i=1}^{m} \frac{(y^{(i)} - \hat{y}(x^{(i)}))^2}{2\sigma^2}
+\end{aligned}</script><p>其中 $\hat{y}^{(i)}$ 是线性回归在第 $i$ 个输入 $x^{(i)}$ 上的输出，$m$ 是训练样本的数目。对比 MSE 和对数似然，</p>
+<script type="math/tex; mode=display">
+\text{MSE} = \frac{1}{m} \sum_{i=1}^{m} |\hat{y}^{(i)} - y^{(i)}|^2</script><p>可以看出最大化关于 $w$ 的对数似然和最小化均方误差会得到相同的参数估计 $w$.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>理想情况下，我们希望用经验分布 $\hat{p}_{\text{data}}$ 匹配真实的数据生成分布 $p_{\text{data}}$，但由于我们没法直接知道这个分布，因此使用极大似然估计的思想，用经验分布 $\hat{p}_{\text{data}}$ 去匹配模型分布 $p_{\text{model}}$.</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Whale
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" title="KL散度视角下的极大似然估计">http://example.com/2024/07/24/KL散度视角下的极大似然估计/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/KL-Divergence/" rel="tag"><i class="fa fa-tag"></i>KL Divergence</a>
+              <a href="/tags/Maximum-Likelihood-Estimate/" rel="tag"><i class="fa fa-tag"></i>Maximum Likelihood Estimate</a>
+              <a href="/tags/Cross-Entropy/" rel="tag"><i class="fa fa-tag"></i>Cross Entropy</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/07/20/Mirror_Descent/" rel="prev" title="Mirror Descent">
+      <i class="fa fa-chevron-left"></i> Mirror Descent
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/10/07/PCA/" rel="next" title="Principal Component Analysis">
+      Principal Component Analysis <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">极大似然估计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Whale"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Whale</p>
+  <div class="site-description" itemprop="description">就读于HDU计算机专业，学的很杂的本科生</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Whale910" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Whale910" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/whalewjy777@163.com" title="E-Mail → whalewjy777@163.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/kan-shi-57-98" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;kan-shi-57-98" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" title="2024&#x2F;10&#x2F;08&#x2F;矩阵求导&#x2F;">矩阵求导</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/07/PCA/" title="2024&#x2F;10&#x2F;07&#x2F;PCA&#x2F;">Principal Component Analysis</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" title="2024&#x2F;07&#x2F;24&#x2F;KL散度视角下的极大似然估计&#x2F;">KL散度视角下的极大似然估计</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/Mirror_Descent/" title="2024&#x2F;07&#x2F;20&#x2F;Mirror_Descent&#x2F;">Mirror Descent</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" title="2024&#x2F;07&#x2F;20&#x2F;2024阿里巴巴数学竞赛决赛应用与计算赛道T2&#x2F;">2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-undefined">
+          <div class="links-of-blogroll-title">
+            <!-- modify icon to fire by szw -->
+            <i class="fa fa-history fa-" aria-hidden="true"></i>
+            
+          </div>
+          <ul class="links-of-blogroll-list">
+            
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+          </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Whale</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'HpAGNqq3x93bEeHtulQGWh5d-gzGzoHsz',
+      appKey     : '1atWGprA9ysYHi56d1cB0X1j',
+      placeholder: "说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

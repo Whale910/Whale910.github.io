@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-whale-48.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="就读于HDU计算机专业，学的很杂的本科生">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Whale&#39;s Blog">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="Whale&#39;s Blog">
+<meta property="og:description" content="就读于HDU计算机专业，学的很杂的本科生">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Whale">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Whale's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Whale's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下阶段所学(Machine Learning, Optimization, Mathematics, etc)，吐槽一下生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" class="post-title-link" itemprop="url">矩阵求导</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-08 00:32:47" itemprop="dateModified" datetime="2024-10-08T00:32:47+08:00">2024-10-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mathematics/" itemprop="url" rel="index"><span itemprop="name">Mathematics</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" class="post-meta-item leancloud_visitors" data-flag-title="矩阵求导" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="矩阵求导"><a href="#矩阵求导" class="headerlink" title="矩阵求导"></a>矩阵求导</h3><h4 id="矩阵变量函数的导数"><a href="#矩阵变量函数的导数" class="headerlink" title="矩阵变量函数的导数"></a>矩阵变量函数的导数</h4><p>定义 (Fréchet 可微) 设 $f(X)$ 为矩阵变量函数，如果存在矩阵 $G \in \mathbb{R}^{m \times n}$， </p>
+<script type="math/tex; mode=display">
+\underset{V \rightarrow 0}{lim} \dfrac{f(X + V) − f(X) − ⟨G,V⟩}{\|V\|} = 0</script><p>则称 $f$ 关于 $X$ 是 Fréchet 可微的．满足上式的 $G$ 称为 $f$ 在 $X$ 处在 Fréchet 可微意义下的梯度．</p>
+<p>定义 (Gâteaux 可微) 设 $f(X)$ 为矩阵变量函数，如果存在矩阵 $G \in \mathbb{R}^{m \times n}$，对任意方向 $V \in \mathbb{R}^{m \times n}$ 满足 </p>
+<script type="math/tex; mode=display">
+\underset{t \rightarrow 0}{lim} \dfrac{f(X + tV) − f(X) − t⟨G,V⟩}{t} = 0</script><p>则称 $f$ 关于 $X$ 是 Gâteaux 可微的．满足上式的 $G$ 称为 $f$ 在 $X$ 处在 Gâteaux 可微意义下的梯度．</p>
+<p>若 $f$ 是 Fréchet 可微的， 则 $f$ 也是 Gâteaux 可微的，且二者意义下的梯度相等，通常情况下，由于 Gâteaux 可微定义式更容易操作，因此通常是利用 Gâteaux 梯度的定义来计算矩阵变量函数的导数(向量情况类似).</p>
+<h4 id="计算实例"><a href="#计算实例" class="headerlink" title="计算实例"></a>计算实例</h4><p><strong>例1.</strong> $f(X) = \text{Tr}(AX^\text{T}B)$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\underset{t \rightarrow 0}{lim} \dfrac{f(X+tV)-f(V)}{t} &= \underset{t \rightarrow 0}{lim} \dfrac{\text{Tr}(A(X+tV)^\text{T}B)-\text{Tr}(AX^\text{T}B)}{t} \\
+  &= \text{Tr}(AV^\text{T}B) = \langle BA,V\rangle
+\end{aligned}</script><p>因此，$\nabla f(X) = BA$.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/07/PCA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/10/07/PCA/" class="post-title-link" itemprop="url">Principal Component Analysis</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-23 23:56:33" itemprop="dateModified" datetime="2024-10-23T23:56:33+08:00">2024-10-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/10/07/PCA/" class="post-meta-item leancloud_visitors" data-flag-title="Principal Component Analysis" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/10/07/PCA/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/10/07/PCA/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>19 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>1.将数据维度降低到二维或者三维以便将其可视化.</p>
+<div align=center>
+<style>.qsevnjofbihe{}</style><img src="/2024/10/07/PCA/2.png" class="qsevnjofbihe">
+</div>
+
+<p>2.去噪，如果数据中存在噪声，用更少的解释变量来表示，舍弃某些变量有时可以起到去噪的效果.</p>
+<p>3.降低数据的多重共线性的影响，考虑下面这样一组数据，其中一列表示用户的工作，另一列表示用户的薪水。但工作和薪水这样两个变量之间可能存在高度的相关性，可能会导致模型参数估计不准确，而PCA是通过对解释变量进行线性变换形成新的一组基，并使新的基之间的相关系数为0，因此PCA可以有效的降低多重共线性的影响.</p>
+<p>4.维度灾难，涉及到向量的计算的问题中，随着维数的增加，计算量呈指数倍增长的一种现象，在很多机器学习问题中，训练集中的每条数据经常伴随着上千、甚至上万个特征，因此降维是比较有效的一种数据预处理方法.</p>
+<p>另一种说法的维度灾难是指，高维空间中数据的分布更加稀疏，想要对数据进行有效地分类更加困难，考虑下面这个例子：</p>
+<p>考虑这样一个球壳，外部球体的半径为 $r_{out}=1$，内部球体的半径为 $r_{in}=1-\varepsilon$.</p>
+<p>考虑维度 $\text{dim}=2$ 的情形，此时有 $V_{out}=\pi r_{out}^2$，$V_{in}=\pi r_{in}^2$.</p>
+<p>考虑维度 $\text{dim}=n$ 的情形，此时的体积表达式如下：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+V_{out}=k r_{out}^n\\
+V_{in}=k r_{in}^n
+\end{cases}</script><p>其中 $k$ 为一个常数，考虑</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\lim_{n \to +\infty} \dfrac{V_{out}-V_{in}}{V_{out}} \\
+= &\lim_{n \to +\infty} \dfrac{k(1-(1-\varepsilon)^n)}{k} \\
+= & 1
+\end{aligned}</script><p>可以发现当维度很高的时候，球壳的几乎占据了整个球体，意味着无论这个 $\varepsilon$ 有多小，数据几乎都分布在这个球壳当中，而中间空着的部分分布着极少的数据，因此高维空间中数据的分布通常更加稀疏.</p>
+<div align=center>
+<style>.ojaucxybvqoj{}</style><img src="/2024/10/07/PCA/1.png" class="ojaucxybvqoj">
+</div>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/10/07/PCA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" class="post-title-link" itemprop="url">KL散度视角下的极大似然估计</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-05 14:07:48" itemprop="dateModified" datetime="2024-10-05T14:07:48+08:00">2024-10-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index"><span itemprop="name">Machine Learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" class="post-meta-item leancloud_visitors" data-flag-title="KL散度视角下的极大似然估计" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>假设数据集 $X = \{x^{(1)}, x^{(2)}, \dots, x^{(m)}\}$，每个样本独立同分布地由未知的真实数据生成分布 $p_{\text{data}}(x)$ 生成.</p>
+<p>设 $p_{\text{model}}(x; \theta)$ 是一个用来估计真实概率 $p_{\text{data}}(x)$ 的映射.</p>
+<p>对参数 $\theta$ 的极大似然估计定义如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+            \hat{\theta} &= \arg \max_\theta p_{\text{model}}(X; \theta)\\
+            &= \arg \max_\theta \prod_{i=1}^m p_{\text{model}}(x^{(i)}; \theta)
+\end{aligned}</script><p>由于乘积可能会导致数值溢出等问题，不便于计算，为了得到一个便于计算的等价优化问题，通过取对数转化成便于计算的求和形式：</p>
+<script type="math/tex; mode=display">
+\hat{\theta} = \arg \max_\theta \sum_{i=1}^m \log p_{\text{model}}(x^{(i)}; \theta)</script><p>假设每个数据等概率地从数据集 $X$ 中抽样得到，除以 $m$ 得到训练数据经验分布 $\hat{p}_{\text{data}}$ 的期望形式：</p>
+<script type="math/tex; mode=display">
+\hat{\theta} = \arg \max_\theta \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x; \theta)]</script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/20/Mirror_Descent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/20/Mirror_Descent/" class="post-title-link" itemprop="url">Mirror Descent</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-05 11:41:59" itemprop="dateModified" datetime="2024-10-05T11:41:59+08:00">2024-10-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Optimization/" itemprop="url" rel="index"><span itemprop="name">Optimization</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/07/20/Mirror_Descent/" class="post-meta-item leancloud_visitors" data-flag-title="Mirror Descent" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/07/20/Mirror_Descent/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/07/20/Mirror_Descent/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" class="post-title-link" itemprop="url">2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-14 20:15:23" itemprop="dateModified" datetime="2024-10-14T20:15:23+08:00">2024-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mathematics/" itemprop="url" rel="index"><span itemprop="name">Mathematics</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" class="post-meta-item leancloud_visitors" data-flag-title="2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今天写一下第二题我的个人解答，这道题源自 NIPS2022 的一篇论文《The alignment property of SGD noise and how it helps select flat minima: A stability analysis》，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关.</p>
+<p><strong>T2</strong>. 假设 $F(x;w)$ 是一个输出标量的深度神经网络，其中 $x$ 是输入, $w$ 表示权重.假设 $F$ 关于 $w$ 连续可微, 并且对于训练数据 $\{x_j, y_j\}_{j=1}^m$ 过参数化, 即存在 $w^\ast$ 使得对于所有 $j$ 满足 $F(x_j;w^\ast) = y_j$.为了研究训练神经网络时 $w^\ast$ 的局部优化行为，我们考虑线性化神经网络 $\tilde{F}(x;w) = F(x;w^\ast) + (w - w^\ast)^\text{T} \nabla F(x;w^\ast)$，其损失函数为</p>
+<script type="math/tex; mode=display">
+\text{Loss}(w) := \frac{1}{2m} \sum_{j=1}^m (y_j - \tilde{F}(x_j;w))^2</script><p>令 $s$ 表示学习率，梯度下降法为</p>
+<script type="math/tex; mode=display">
+w_{i+1} = w_i - s \nabla \text{Loss}(w_i)</script><p>而随机梯度下降法为</p>
+<script type="math/tex; mode=display">
+w_{i+1} = w_i - s (\nabla \text{Loss}(w_i) + \epsilon_i)</script><p>其中噪声项满足 $\mathbb{E} \epsilon_i = 0$ 和 $\mathbb{E} \epsilon_i \epsilon_i^\top = M(w_i)/b$，$b$ 是 mini-batch 的大小.假设协方差矩阵 $\Sigma$ 为</p>
+<script type="math/tex; mode=display">
+\Sigma = \frac{1}{m} \sum_{j=1}^m \nabla F(x_j;w^\ast) \nabla F(x_j;w^*)^\text{T}</script><p>在以下意义上对齐:</p>
+<script type="math/tex; mode=display">
+\frac{\text{Tr}(M(w)\Sigma)}{2\text{Loss}(w)\|\Sigma\|_F^2} \geq \delta</script><p>对于 $s &gt; 0$ 和所有 $w$ 成立。这里 $|\cdot|_F$ 表示 Frobenius 范数。</p>
+<p>(1) 对于梯度下降，证明如果 $\Sigma$ 的谱范数满足</p>
+<script type="math/tex; mode=display">
+\|\Sigma\|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $i$, $\text{Loss}(w_i)$ 是有界的).(注意，这蕴含了一个依赖维度的 $|\Sigma|_F \leq \dfrac{2\sqrt{d}}{s}$，其中 $d$ 是 $w$ 的维度).</p>
+<p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $i$ 都有界，则以下独立于维度的不等式必须成立</p>
+<script type="math/tex; mode=display">
+\|\Sigma\|_F \leq \frac{\sqrt{b\delta}}{s}</script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/" class="post-title-link" itemprop="url">2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-12 13:08:47" itemprop="dateModified" datetime="2024-10-12T13:08:47+08:00">2024-10-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mathematics/" itemprop="url" rel="index"><span itemprop="name">Mathematics</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/" class="post-meta-item leancloud_visitors" data-flag-title="2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>分享一下2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答.</p>
+<p><strong>T4</strong>. 考虑如下两个优化问题：</p>
+<script type="math/tex; mode=display">\begin{aligned}         
+\text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\         &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>和</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $i = 1, \cdots, n$，$x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N})$，满足 $\sum_{i=1}^n m_i = m$。函数 $f: \mathbb{R}^m \to \mathbb{R}$ 和 $\mathbf{g}: \mathbb{R}^m \to \mathbb{R}^p (p \in \mathbb{N})$ 是多仿射的，即对任意 $i \in \{1, \cdots, n\}$，在固定下标在 $\{1, \cdots, N\} \setminus \{i\}$ 中的块后，它们对 $x_i$ 是仿射函数。这里，我们称一个函数 $h: \mathbb{R}^q \to \mathbb{R}^r (q, r \in \mathbb{N})$ 为仿射的，若对任意 $a \in \mathbb{R}$ 以及 $y^{(1)}, y^{(2)} \in \mathbb{R}^q$，有</p>
+<script type="math/tex; mode=display">
+h(a y^{(1)} + (1-a) y^{(2)}) = a h(y^{(1)}) + (1-a) h(y^{(2)}).</script><p>对任意 $i \in \{1, \cdots, n\}$，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积。此外，在问题 (B) 中，标量 $\beta$ 是一个实数，$\mathbf{1}_p $ 代表 $p$ 维全一向量。</p>
+<p>(1) 对任意  $\beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点(即极点最优解).<br>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.<br>(3) 存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/23/Pinsker_Inequality/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/06/23/Pinsker_Inequality/" class="post-title-link" itemprop="url">Pinsker Inequality</a>
+        </h2>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-05 14:09:06" itemprop="dateModified" datetime="2024-10-05T14:09:06+08:00">2024-10-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mathematics/" itemprop="url" rel="index"><span itemprop="name">Mathematics</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/06/23/Pinsker_Inequality/" class="post-meta-item leancloud_visitors" data-flag-title="Pinsker Inequality" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/06/23/Pinsker_Inequality/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/06/23/Pinsker_Inequality/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
+<h2 id="Pinsker-不等式证明"><a href="#Pinsker-不等式证明" class="headerlink" title="Pinsker 不等式证明"></a>Pinsker 不等式证明</h2><p><strong>(Pinsker’s inequality)</strong>设 $P$ 和 $Q$ 是定义在论域 $U$ 上的两个概率分布，那么</p>
+<script type="math/tex; mode=display">D_{KL}(P||Q) \ge \frac{1}{2}||P-Q||_1^2 \tag{1}</script><p>由 Pinsker 不等式可以得到负熵函数关于$1$-范数是强凸的，下面先给出 Pinsker 不等式的证明。</p>
+<p><strong>$Proof.$</strong>首先我们给出 KL 散度的链式法则：</p>
+<script type="math/tex; mode=display">\begin{aligned}
+D_{KL}(P(X, Y)||Q(X, Y)) &= \sum_{x,y} p(x, y) \log \frac{p(x, y)}{q(x, y)} \\\\
+&= \sum_{x,y} p(x)p(y|x) \log \frac{p(x)p(y|x)}{q(x)q(y|x)} \\\\
+&= \sum_{x} p(x) \log \frac{p(x)}{q(x)} \sum_{y} p(y|x) + \sum_{x} p(x) \sum_{y} p(y|x) \log \frac{p(y|x)}{q(y|x)} \\\\
+&= D_{KL}(P(X)||Q(X)) + \sum_{x} p(x) D_{KL}(P||Q|X=x) \\\\
+&= D_{KL}(P(X)||Q(X)) + \mathbb{E}_{X \thicksim P(X)}[D_{\text{KL}}(P(Y|X) \| Q(Y|X))]
+\end{aligned}
+\tag{2}</script><p>特别地，若$P(X,Y)=P_1(X)P_2(Y),Q(X,Y)=Q_1(X)Q_2(Y)$，那么有</p>
+<script type="math/tex; mode=display">D_{KL}(P(X, Y)||Q(X, Y)) = D_{KL}(P_1(X)||Q_1(X)) + D_{KL}(P_2(X)||Q_2(X))</script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/06/23/Pinsker_Inequality/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Whale"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Whale</p>
+  <div class="site-description" itemprop="description">就读于HDU计算机专业，学的很杂的本科生</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Whale910" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Whale910" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/whalewjy777@163.com" title="E-Mail → whalewjy777@163.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/kan-shi-57-98" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;kan-shi-57-98" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" title="2024&#x2F;10&#x2F;08&#x2F;矩阵求导&#x2F;">矩阵求导</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/07/PCA/" title="2024&#x2F;10&#x2F;07&#x2F;PCA&#x2F;">Principal Component Analysis</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" title="2024&#x2F;07&#x2F;24&#x2F;KL散度视角下的极大似然估计&#x2F;">KL散度视角下的极大似然估计</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/Mirror_Descent/" title="2024&#x2F;07&#x2F;20&#x2F;Mirror_Descent&#x2F;">Mirror Descent</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" title="2024&#x2F;07&#x2F;20&#x2F;2024阿里巴巴数学竞赛决赛应用与计算赛道T2&#x2F;">2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-undefined">
+          <div class="links-of-blogroll-title">
+            <!-- modify icon to fire by szw -->
+            <i class="fa fa-history fa-" aria-hidden="true"></i>
+            
+          </div>
+          <ul class="links-of-blogroll-list">
+            
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+          </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Whale</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'HpAGNqq3x93bEeHtulQGWh5d-gzGzoHsz',
+      appKey     : '1atWGprA9ysYHi56d1cB0X1j',
+      placeholder: "说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

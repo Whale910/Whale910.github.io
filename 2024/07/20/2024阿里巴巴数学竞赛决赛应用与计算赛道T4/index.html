@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons8-whale-48.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons8-whale-48.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="分享一下2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答. T4. 考虑如下两个优化问题： \begin{aligned}          \text{(A)} \quad &amp;\mathop{\min}\limits_{x}  f(x),\\\\         &amp;\text{s.t.} \quad \mathbf{g}(x) &#x3D; 0,\\\\         &amp;x_i \i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)">
+<meta property="og:url" content="http://example.com/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/index.html">
+<meta property="og:site_name" content="Whale&#39;s Blog">
+<meta property="og:description" content="分享一下2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答. T4. 考虑如下两个优化问题： \begin{aligned}          \text{(A)} \quad &amp;\mathop{\min}\limits_{x}  f(x),\\\\         &amp;\text{s.t.} \quad \mathbf{g}(x) &#x3D; 0,\\\\         &amp;x_i \i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-07-20T03:34:27.000Z">
+<meta property="article:modified_time" content="2024-10-12T05:08:47.511Z">
+<meta property="article:author" content="Whale">
+<meta property="article:tag" content="Linear Programming">
+<meta property="article:tag" content="Duality Theory">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题) | Whale's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Whale's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录一下阶段所学(Machine Learning, Optimization, Mathematics, etc)，吐槽一下生活</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Whale">
+      <meta itemprop="description" content="就读于HDU计算机专业，学的很杂的本科生">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Whale's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)
+        </h1>
+
+        <div class="post-meta">
+        
+          
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-12 13:08:47" itemprop="dateModified" datetime="2024-10-12T13:08:47+08:00">2024-10-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mathematics/" itemprop="url" rel="index"><span itemprop="name">Mathematics</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/" class="post-meta-item leancloud_visitors" data-flag-title="2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>分享一下2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答.</p>
+<p><strong>T4</strong>. 考虑如下两个优化问题：</p>
+<script type="math/tex; mode=display">\begin{aligned}         
+\text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\         &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>和</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $i = 1, \cdots, n$，$x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N})$，满足 $\sum_{i=1}^n m_i = m$。函数 $f: \mathbb{R}^m \to \mathbb{R}$ 和 $\mathbf{g}: \mathbb{R}^m \to \mathbb{R}^p (p \in \mathbb{N})$ 是多仿射的，即对任意 $i \in \{1, \cdots, n\}$，在固定下标在 $\{1, \cdots, N\} \setminus \{i\}$ 中的块后，它们对 $x_i$ 是仿射函数。这里，我们称一个函数 $h: \mathbb{R}^q \to \mathbb{R}^r (q, r \in \mathbb{N})$ 为仿射的，若对任意 $a \in \mathbb{R}$ 以及 $y^{(1)}, y^{(2)} \in \mathbb{R}^q$，有</p>
+<script type="math/tex; mode=display">
+h(a y^{(1)} + (1-a) y^{(2)}) = a h(y^{(1)}) + (1-a) h(y^{(2)}).</script><p>对任意 $i \in \{1, \cdots, n\}$，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积。此外，在问题 (B) 中，标量 $\beta$ 是一个实数，$\mathbf{1}_p $ 代表 $p$ 维全一向量。</p>
+<p>(1) 对任意  $\beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点(即极点最优解).<br>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.<br>(3) 存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+<span id="more"></span>
+<p>(1) <strong>$Proof.$</strong> 假设 $x^\ast$ 为非极点的最优解，考虑 $x^\ast$ 为多边形的内点(边界点情况类似)，任取一个方向向量 $d$，构造函数</p>
+<script type="math/tex; mode=display">
+\varphi(t)=f(x^\ast+td)+\beta g(x^\ast+td)^T\mathbf{1}_p \\</script><p>由于，$f$ 和 $g$ 均为仿射函数，故 $\varphi$ 为关于 $t$ 的 $1$ 次函数，但由于 $x^\ast$ 为最优解，故 $\varphi (t)$ 不能是增函数，否则在沿 $d$ 的反方向上可以找到更小的值，与 $x^\ast$ 为最优解矛盾，同理也不能是减函数，只能为常值函数.</p>
+<p>同时，由于存在极值点的多面体中一定不包含直线(这句话的证明参考 《Introduction to Linear Optimization》 第 2.5 节)，故沿着 $d$ 或 $-d$ 方向可以走到多面体的区域边界，类似地，按照上面的构造方法沿着边界方向继续走，可以到找一个极点最优解.</p>
+<p>(2) <strong>$Proof.$</strong> 显然问题 (B) 的目标函数为问题 (A) 的Lagrange对偶形式，记</p>
+<script type="math/tex; mode=display">
+L(x,\beta) = f(x) + \beta {g}(x)^\top \mathbf{1}_p \\</script><p>则问题 (A) 可以写为如下等价形式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}          & \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta),\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>问题 (B) 可以写为如下形式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}          & \mathop{\min}\limits_{x}  L(x,\beta),\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>对满足约束 $x_i \in \mathcal{F}_i, i = 1, \cdots, n$ 的 $x$ 有</p>
+<script type="math/tex; mode=display">
+L(x,\beta) \leq \mathop{\max}\limits_{\beta} L(x,\beta) \\</script><p>问题 (B) 的最优解取到的最小值一定小于等于相同的可行解在问题 (A) 上的取值，由线性规划的强对偶性知，问题 (B) 和问题 (A) 具有相同的最优值，故若问题 (B) 的最优解是问题 (A) 的可行解，那么就能证明问题 (B) 的最优解都是问题 (A) 的最优解。 因此只需证明对于问题 (B) 的最优解，存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的最优解都满足问题 (A) 的约束条件即可.</p>
+<p>记 $S$ 为 $g(x) = 0$ 的解集，则当 $\mathop{\min}\limits_{x \in S} f(x) \leq \mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p$ 时，问题 (B) 的最优解 $x^\ast \in S$，即 $x^\ast$ 满足问题 (A) 的约束条件.由 $\mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p$，只需 $\mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \in S} f(x)$ 即可，由函数 $g$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负解出</p>
+<script type="math/tex; mode=display">
+\beta \geq \bar{\beta} = \cfrac{\mathop{\min}\limits_{x \in S} f(x)-\mathop{\min}\limits_{x \notin S} f(x)}{\mathop{\min}\limits_{x \notin S} {g}(x)^\top \mathbf{1}_p} \\</script><p>显然问题 (B) 的极点最优解属于其最优解，故存在这样一个 $\bar{\beta}$ 使得问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
+<p>(3) <strong>$Proof.$</strong> 取 $\tilde{\beta} = \max\left\{\bar{\beta},0\right\}$，由 (2) 可知，当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解都是问题 (A) 的最优解，下面只需要证明问题 (A) 的最优解都是问题 (B) 的最优解即可.由函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负和 $\beta \geq 0$，可得</p>
+<script type="math/tex; mode=display">
+f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq  f(x) \\</script><p>故问题 (A) 的最优解取到的最小值一定小于等于相同的可行解在问题 (B) 上的取值，同样地由线性规划的强对偶性知，问题 (B) 和问题 (A) 具有相同的最优值，且问题 (A) 的可行解一定是问题 (B) 的可行解，故问题 (A) 的最优解一定是问题 (B) 的最优解.</p>
+<p>综上所述，存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Whale
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/" title="2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)">http://example.com/2024/07/20/2024阿里巴巴数学竞赛决赛应用与计算赛道T4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linear-Programming/" rel="tag"><i class="fa fa-tag"></i>Linear Programming</a>
+              <a href="/tags/Duality-Theory/" rel="tag"><i class="fa fa-tag"></i>Duality Theory</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/06/23/Pinsker_Inequality/" rel="prev" title="Pinsker Inequality">
+      <i class="fa fa-chevron-left"></i> Pinsker Inequality
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" rel="next" title="2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)">
+      2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Whale"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Whale</p>
+  <div class="site-description" itemprop="description">就读于HDU计算机专业，学的很杂的本科生</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Whale910" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Whale910" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/whalewjy777@163.com" title="E-Mail → whalewjy777@163.com"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/kan-shi-57-98" title="Zhihu → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;kan-shi-57-98" rel="noopener" target="_blank"><i class="fab fa-zhihu fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+  <div class="links-of-recent-posts motion-element">
+    <div class="links-of-recent-posts-title">
+      <i class="fa fa-history fa-fw"></i>
+      最近文章
+    </div>
+    <ul class="links-of-recent-posts-list">
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/" title="2024&#x2F;10&#x2F;08&#x2F;矩阵求导&#x2F;">矩阵求导</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/10/07/PCA/" title="2024&#x2F;10&#x2F;07&#x2F;PCA&#x2F;">Principal Component Analysis</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" title="2024&#x2F;07&#x2F;24&#x2F;KL散度视角下的极大似然估计&#x2F;">KL散度视角下的极大似然估计</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/Mirror_Descent/" title="2024&#x2F;07&#x2F;20&#x2F;Mirror_Descent&#x2F;">Mirror Descent</a>
+        </li>
+        <li class="links-of-recent-posts-item">
+          <a href="/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/" title="2024&#x2F;07&#x2F;20&#x2F;2024阿里巴巴数学竞赛决赛应用与计算赛道T2&#x2F;">2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      
+      
+        <div class="links-of-blogroll motion-element links-of-blogroll-undefined">
+          <div class="links-of-blogroll-title">
+            <!-- modify icon to fire by szw -->
+            <i class="fa fa-history fa-" aria-hidden="true"></i>
+            
+          </div>
+          <ul class="links-of-blogroll-list">
+            
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+              <li class="recent_posts_li">
+                <a href="/" title="" target="_blank"></a>
+              </li>
+            
+          </ul>
+        </div>
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Whale</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'HpAGNqq3x93bEeHtulQGWh5d-gzGzoHsz',
+      appKey     : '1atWGprA9ysYHi56d1cB0X1j',
+      placeholder: "说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
