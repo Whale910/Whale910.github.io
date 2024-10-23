@@ -1,48 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>矩阵求导</title>
-    <url>/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/</url>
-    <content><![CDATA[<h3 id="矩阵求导"><a href="#矩阵求导" class="headerlink" title="矩阵求导"></a>矩阵求导</h3><h4 id="矩阵变量函数的导数"><a href="#矩阵变量函数的导数" class="headerlink" title="矩阵变量函数的导数"></a>矩阵变量函数的导数</h4><p>定义 (Fréchet 可微) 设 $f(X)$ 为矩阵变量函数，如果存在矩阵 $G \in \mathbb{R}^{m \times n}$， </p>
+    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</title>
+    <url>/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/</url>
+    <content><![CDATA[<p>今天写一下第二题我的个人解答，这道题源自 NIPS2022 的一篇论文《The alignment property of SGD noise and how it helps select flat minima: A stability analysis》，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关.</p>
+<p><strong>T2</strong>. 假设 $F(x;w)$ 是一个输出标量的深度神经网络，其中 $x$ 是输入, $w$ 表示权重.假设 $F$ 关于 $w$ 连续可微, 并且对于训练数据 $\{x_j, y_j\}_{j=1}^m$ 过参数化, 即存在 $w^\ast$ 使得对于所有 $j$ 满足 $F(x_j;w^\ast) = y_j$.为了研究训练神经网络时 $w^\ast$ 的局部优化行为，我们考虑线性化神经网络 $\tilde{F}(x;w) = F(x;w^\ast) + (w - w^\ast)^\text{T} \nabla F(x;w^\ast)$，其损失函数为</p>
 <script type="math/tex; mode=display">
-\underset{V \rightarrow 0}{lim} \dfrac{f(X + V) − f(X) − ⟨G,V⟩}{\|V\|} = 0</script><p>则称 $f$ 关于 $X$ 是 Fréchet 可微的．满足上式的 $G$ 称为 $f$ 在 $X$ 处在 Fréchet 可微意义下的梯度．</p>
-<p>定义 (Gâteaux 可微) 设 $f(X)$ 为矩阵变量函数，如果存在矩阵 $G \in \mathbb{R}^{m \times n}$，对任意方向 $V \in \mathbb{R}^{m \times n}$ 满足 </p>
+\text{Loss}(w) := \frac{1}{2m} \sum_{j=1}^m (y_j - \tilde{F}(x_j;w))^2</script><p>令 $s$ 表示学习率，梯度下降法为</p>
 <script type="math/tex; mode=display">
-\underset{t \rightarrow 0}{lim} \dfrac{f(X + tV) − f(X) − t⟨G,V⟩}{t} = 0</script><p>则称 $f$ 关于 $X$ 是 Gâteaux 可微的．满足上式的 $G$ 称为 $f$ 在 $X$ 处在 Gâteaux 可微意义下的梯度．</p>
-<p>若 $f$ 是 Fréchet 可微的， 则 $f$ 也是 Gâteaux 可微的，且二者意义下的梯度相等，通常情况下，由于 Gâteaux 可微定义式更容易操作，因此通常是利用 Gâteaux 梯度的定义来计算矩阵变量函数的导数(向量情况类似).</p>
-<h4 id="计算实例"><a href="#计算实例" class="headerlink" title="计算实例"></a>计算实例</h4><p><strong>例1.</strong> $f(X) = \text{Tr}(AX^\text{T}B)$</p>
+w_{i+1} = w_i - s \nabla \text{Loss}(w_i)</script><p>而随机梯度下降法为</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-\underset{t \rightarrow 0}{lim} \dfrac{f(X+tV)-f(V)}{t} &= \underset{t \rightarrow 0}{lim} \dfrac{\text{Tr}(A(X+tV)^\text{T}B)-\text{Tr}(AX^\text{T}B)}{t} \\
-  &= \text{Tr}(AV^\text{T}B) = \langle BA,V\rangle
-\end{aligned}</script><p>因此，$\nabla f(X) = BA$.</p>
-<span id="more"></span>
-<p><strong>例2.</strong> $f(X) = \text{ln}(\text{det}(X)),X \in S^n_{++}$</p>
+w_{i+1} = w_i - s (\nabla \text{Loss}(w_i) + \epsilon_i)</script><p>其中噪声项满足 $\mathbb{E} \epsilon_i = 0$ 和 $\mathbb{E} \epsilon_i \epsilon_i^\top = M(w_i)/b$，$b$ 是 mini-batch 的大小.假设协方差矩阵 $\Sigma$ 为</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-f(X+tV)-f(V) &= \text{ln}(\text{det}(X+tV))-\text{ln}(\text{det}(X)) \\
-  &= \text{ln}(\text{det}(X^{1/2}(I + tX^{−1/2}VX^{−1/2})X^{1/2})) − ln(det(X)) \\
-  &= \text{ln}(\text{det}(I + tX^{−1/2}VX^{−1/2}))
-\end{aligned}</script><p>由于 $X^{−1/2}VX^{−1/2}$ 是对称矩阵，可以正交对角化，设它的特征值为 $\lambda_1,\lambda_2,\cdots,\lambda_n$，则</p>
+\Sigma = \frac{1}{m} \sum_{j=1}^m \nabla F(x_j;w^\ast) \nabla F(x_j;w^*)^\text{T}</script><p>在以下意义上对齐:</p>
+<script type="math/tex; mode=display">
+\frac{\text{Tr}(M(w)\Sigma)}{2\text{Loss}(w)\|\Sigma\|_F^2} \geq \delta</script><p>对于 $s &gt; 0$ 和所有 $w$ 成立。这里 $|\cdot|_F$ 表示 Frobenius 范数。</p>
+<p>(1) 对于梯度下降，证明如果 $\Sigma$ 的谱范数满足</p>
+<script type="math/tex; mode=display">
+\|\Sigma\|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $i$, $\text{Loss}(w_i)$ 是有界的).(注意，这蕴含了一个依赖维度的 $|\Sigma|_F \leq \dfrac{2\sqrt{d}}{s}$，其中 $d$ 是 $w$ 的维度).</p>
+<p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $i$ 都有界，则以下独立于维度的不等式必须成立</p>
+<script type="math/tex; mode=display">
+\|\Sigma\|_F \leq \frac{\sqrt{b\delta}}{s}</script><span id="more"></span>
+<p>(1) <strong>$Proof$.</strong> 由过参数化的条件有，$F(x_j; w^*) = y_j$，那么</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-&\text{ln}(\text{det}(I + tX^{−1/2}VX^{−1/2})) \\
-=& \text{ln}\prod^n_{i=1}(1+t \lambda_i) \\
-=& \sum^n_{i=1}\text{ln}(1+t \lambda_i) \\
-=& \sum^n_{i=1}t\lambda_i+\mathcal{O}(t^2) \\
-=& t\text{Tr}(X^{−1/2}VX^{−1/2})+\mathcal{O}(t^2) \\
-=& t\langle (X^{-1})^\text{T},V \rangle+\mathcal{O}(t^2) \\
-\end{aligned}</script><p>因此，$\nabla f(X) = (X^{-1})^\text{T}$.</p>
-<h4 id="常用公式"><a href="#常用公式" class="headerlink" title="常用公式"></a>常用公式</h4><p>$\dfrac{ \partial a^Tx }{ \partial x } = a$</p>
-<p>$\dfrac{ \partial x^Ta }{ \partial x } = a$</p>
-<p>$\dfrac{ \partial x^Tx }{ \partial x } = 2x$</p>
-<p> $\dfrac{ \partial x^TAx }{ \partial x } = (A+A^T)x$</p>
+\text{Loss}(w_i) &= \frac{1}{2m} \sum_{j=1}^{m} \left( F(x_j; w^\ast) + (w_i - w^\ast)^\text{T} \nabla F(x_j; w^\ast) - y_j \right)^2 \\
+&= \frac{1}{2m} \sum_{j=1}^{m} \left( (w_i - w^\ast)^\text{T} \nabla F(x_j; w^\ast) \right)^2
+\end{aligned}</script><p>对 $\text{Loss}(w_i)$ 求梯度可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\nabla \text{Loss}(w_i) &= \frac{1}{m} \sum_{j=1}^{m} \nabla F(x_j; w^\ast) \nabla F(x_j; w^\ast)^\text{T} (w_i - w^\ast) \\
+&= \Sigma (w_i - w^\ast)
+\end{aligned}</script><p>由梯度下降的更新格式，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+w_{i+1} - w^\ast &= w_i - s \nabla \text{Loss}(w_i) - w^\ast \\
+&= (I - s\Sigma)(w_i - w^\ast)
+\end{aligned}</script><p>对上述两边同时取 $2$ 范数，因为 $I - s\Sigma$ 为对称矩阵，因此一定存在矩阵 $P$ 使得 $I - s\Sigma$ 可以正交对角化，故</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\|I - s\Sigma\|_2 &= \|P(I - s\Sigma)P^\text{T}\|_2 \\
+&= \|I - s\Lambda\|_2 \\
+&= \rho(I - s\Lambda)
+\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho(\Sigma) \leq \dfrac{2}{s}$，可得 $I - s\Lambda$ 对角线上元素范围为 $[-1, 1]$，即 $\rho(I - s\Lambda) \leq 1$</p>
+<p>所以</p>
+<script type="math/tex; mode=display">
+\|w_{i+1} - w^\ast\|_2 \leq \|w_i - w^\ast\|_2 \leq \dots \leq \|w_0 - w^\ast\|_2</script><p>由</p>
+<script type="math/tex; mode=display">
+\text{Loss}(w_i) = \frac{1}{2} (w_i - w^\ast)^\text{T} \Sigma (w_i - w^\ast)</script><p>可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+|\text{Loss}(w_i)| &\leq \frac{1}{2} \|(w_i - w^\ast)\|_2^2 \|\Sigma\|_F \\
+&\leq \frac{\sqrt{d}\|(w_i - w^\ast)\|_2^2}{s}
+\end{aligned}</script><p>故梯度下降法是局部稳定的.</p>
+<p>第二小问的证明过程参考论文 《The alignment property of SGD noise and how it helps select flat minima: A stability analysis》 中的 Theorem 3.3 的证明</p>
+<p>(2) <strong>$Proof$.</strong> 记 $\theta_i = w_i - w^\ast$，那么有</p>
+<script type="math/tex; mode=display">
+\text{Loss}(w_i) = \frac{1}{2} \theta_i^\text{T} \Sigma \theta_i</script><script type="math/tex; mode=display">
+\nabla \text{Loss}(w_i) = \Sigma \theta_i</script><p>计算 $\mathbb{E}\text{Loss}(w_{i+1})$，并由 $\mathbb{E}\epsilon_i = 0$ 和 $\mathbb{E}\epsilon_i \epsilon_i^\text{T} = M(w_i)/b$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbb{E}\text{Loss}(w_{i+1}) &= \mathbb{E}\left[\frac{1}{2}(w_{i+1} - w^\ast)^\text{T} \Sigma (w_{i+1} - w^\ast)\right] \\
+&= \mathbb{E}\left[\frac{1}{2} (\theta_i - s(\nabla \text{Loss}(w_i) + \epsilon_i))^\text{T} \Sigma (\theta_i - s(\nabla \text{Loss}(w_i) + \epsilon_i))\right] \\
+&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i - s \theta_i^\text{T} \Sigma \epsilon_i + \frac{1}{2} s^2 (\Sigma \theta_i + \epsilon_i)^\text{T} \Sigma (\Sigma \theta_i + \epsilon_i)\right] \\
+&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i + \frac{1}{2} s^2 (\Sigma \theta_i + \epsilon_i)^\text{T} \Sigma (\Sigma \theta_i + \epsilon_i)\right] \\
+&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i\right] + \frac{1}{2} s^2 \mathbb{E} [(\Sigma \theta_i + \epsilon_i)^\text{T} \Sigma (\Sigma \theta_i + \epsilon_i)] \\
+&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i\right] + \frac{1}{2} s^2 \mathbb{E} [\theta_i^\text{T} \Sigma^3 \theta_i + \epsilon_i^\text{T} \Sigma^2 \theta_i + \epsilon_i^\text{T} \Sigma \epsilon_i] \\
+&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i\right] + \frac{1}{2} s^2 \mathbb{E} [\theta_i^\text{T} \Sigma^3 \theta_i] + \frac{1}{2} s^2 \mathbb{E} [\epsilon_i^\text{T} \Sigma \epsilon_i]
+\end{aligned}</script><p>考虑期望 $\mathbb{E}[x^\text{T} A x]$，其中 $\mathbb{E}x = 0$ 和 $\mathbb{E}xx^\text{T} = M(w_i)/b$</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[x^\text{T} A x] = \mathbb{E}\left[\sum_{i=1}^n \sum_{j=1}^n x_i A_{ij} x_j \right]</script><script type="math/tex; mode=display">
+= \sum_{i=1}^n \sum_{j=1}^n A_{ij} \mathbb{E}[x_i x_j]</script><p>对于 $i \neq j$，因为 $x$ 的均值为 $0$，$\mathbb{E}[x_i x_j] = 0$（这里假设各个分量是相互独立的），故</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[x^\text{T} A x] = \sum_{i=1}^n A_{ii} \mathbb{E}[x_i^2] = \text{Tr}(A \mathbb{E}xx^\text{T})</script><p>即</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[\epsilon_i^\text{T} \Sigma \epsilon_i] = \text{Tr}(\Sigma \mathbb{E}\epsilon_i \epsilon_i^\text{T}) = \frac{1}{b} \text{Tr}(M(w_i) \Sigma)</script><p>记 $r(\theta) = 1 - 2s \dfrac{\theta^\text{T} \Sigma^2 \theta}{\theta^\text{T} \Sigma \theta} + s^2 \dfrac{\theta^\text{T} \Sigma^3 \theta}{\theta^\text{T} \Sigma \theta}$，那么</p>
+<script type="math/tex; mode=display">
+\mathbb{E} \text{Loss}(w_{i+1}) = \mathbb{E} [r(\theta_i) \text{Loss}(w_i)] + \frac{s^2}{2b} \text{Tr}(M(w_i)\Sigma)</script><p>下证 $r(\theta) \geq 0$，令</p>
+<script type="math/tex; mode=display">
+u = \frac{\Sigma^{1/2} \theta}{\|\Sigma^{1/2} \theta\|_2}</script><p>并对 $\Sigma$ 进行谱分解</p>
+<script type="math/tex; mode=display">
+\Sigma = \sum_j \lambda_j e_j e_j^T</script><p>假设 $u$ 在 $e_i$ 这组标准正交基下的表示如下</p>
+<script type="math/tex; mode=display">
+u = \sum_j a_j e_j</script><p>且由 $|u|_2 = 1$ 得 $\sum_j a_j^2 = 1$，那么</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+r(\theta) &= 1 - 2s u^\text{T} \Sigma u + s^2 u^\text{T} \Sigma^2 u \\
+&= 1 + \sum_j (-2s \lambda_j - s^2 \lambda_j^2) a_j^2 \\
+&\geq 1 + \inf_{\lambda \geq 0} (-2s \lambda - s^2 \lambda^2) = 0
+\end{aligned}</script><p>由 $r(\theta_i) \text{Loss}(w_i) \geq 0$ 和 $\dfrac{\text{Tr}(M(w)\Sigma)}{2 \text{Loss}(w)|\Sigma|_F^2} \geq \delta$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbb{E} \text{Loss}(w_{i+1}) &= \mathbb{E}[r(\theta_i) \text{Loss}(w_i)]+\frac{s^2}{2b} \text{Tr}(M(w_i)\Sigma)\\
+&\geq \frac{s^2}{2b} \text{Tr}(M(w_i)\Sigma)\\
+&\geq \frac{s^2}{b} \delta \text{Loss}(w_{i}) \|\Sigma\|_F^2\\
+\end{aligned}</script><p>因为 $\mathbb{E} \text{Loss}(w_{i+1})$ 是有界的，所以</p>
+<script type="math/tex; mode=display">
+\frac{s^2}{b} \delta \|\Sigma\|_F^2 \leq 1</script><p>否则，令 $q=\dfrac{s^2}{b} \delta |\Sigma|_F^2$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mathbb{E} \text{Loss}(w_{i+1}) &\geq \frac{s^2}{b} \delta \text{Loss}(w_{i}) \|\Sigma\|_F^2\\
+&=q^i \text{Loss}(w_{1})
+\end{aligned}</script><p>$\mathbb{E} \text{Loss}(w_{i+1})$ 呈指数增长，矛盾.故 $|\Sigma|_F \leq \dfrac{\sqrt{b\delta}}{s}$，证毕.</p>
 ]]></content>
       <categories>
         <category>Mathematics</category>
       </categories>
       <tags>
         <tag>Matrix Theory</tag>
+        <tag>Over-parameterization</tag>
+        <tag>Gradient Descent</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</title>
+    <url>/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/</url>
+    <content><![CDATA[<p>分享一下2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答.</p>
+<p><strong>T4</strong>. 考虑如下两个优化问题：</p>
+<script type="math/tex; mode=display">\begin{aligned}         
+\text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\         &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>和</p>
+<script type="math/tex; mode=display">
+\begin{aligned}         \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $i = 1, \cdots, n$，$x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N})$，满足 $\sum_{i=1}^n m_i = m$。函数 $f: \mathbb{R}^m \to \mathbb{R}$ 和 $\mathbf{g}: \mathbb{R}^m \to \mathbb{R}^p (p \in \mathbb{N})$ 是多仿射的，即对任意 $i \in \{1, \cdots, n\}$，在固定下标在 $\{1, \cdots, N\} \setminus \{i\}$ 中的块后，它们对 $x_i$ 是仿射函数。这里，我们称一个函数 $h: \mathbb{R}^q \to \mathbb{R}^r (q, r \in \mathbb{N})$ 为仿射的，若对任意 $a \in \mathbb{R}$ 以及 $y^{(1)}, y^{(2)} \in \mathbb{R}^q$，有</p>
+<script type="math/tex; mode=display">
+h(a y^{(1)} + (1-a) y^{(2)}) = a h(y^{(1)}) + (1-a) h(y^{(2)}).</script><p>对任意 $i \in \{1, \cdots, n\}$，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积。此外，在问题 (B) 中，标量 $\beta$ 是一个实数，$\mathbf{1}_p $ 代表 $p$ 维全一向量。</p>
+<p>(1) 对任意  $\beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点(即极点最优解).<br>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.<br>(3) 存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+<span id="more"></span>
+<p>(1) <strong>$Proof.$</strong> 假设 $x^\ast$ 为非极点的最优解，考虑 $x^\ast$ 为多边形的内点(边界点情况类似)，任取一个方向向量 $d$，构造函数</p>
+<script type="math/tex; mode=display">
+\varphi(t)=f(x^\ast+td)+\beta g(x^\ast+td)^T\mathbf{1}_p \\</script><p>由于，$f$ 和 $g$ 均为仿射函数，故 $\varphi$ 为关于 $t$ 的 $1$ 次函数，但由于 $x^\ast$ 为最优解，故 $\varphi (t)$ 不能是增函数，否则在沿 $d$ 的反方向上可以找到更小的值，与 $x^\ast$ 为最优解矛盾，同理也不能是减函数，只能为常值函数.</p>
+<p>同时，由于存在极值点的多面体中一定不包含直线(这句话的证明参考 《Introduction to Linear Optimization》 第 2.5 节)，故沿着 $d$ 或 $-d$ 方向可以走到多面体的区域边界，类似地，按照上面的构造方法沿着边界方向继续走，可以到找一个极点最优解.</p>
+<p>(2) <strong>$Proof.$</strong> 显然问题 (B) 的目标函数为问题 (A) 的Lagrange对偶形式，记</p>
+<script type="math/tex; mode=display">
+L(x,\beta) = f(x) + \beta {g}(x)^\top \mathbf{1}_p \\</script><p>则问题 (A) 可以写为如下等价形式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}          & \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta),\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>问题 (B) 可以写为如下形式</p>
+<script type="math/tex; mode=display">
+\begin{aligned}          & \mathop{\min}\limits_{x}  L(x,\beta),\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>对满足约束 $x_i \in \mathcal{F}_i, i = 1, \cdots, n$ 的 $x$ 有</p>
+<script type="math/tex; mode=display">
+L(x,\beta) \leq \mathop{\max}\limits_{\beta} L(x,\beta) \\</script><p>问题 (B) 的最优解取到的最小值一定小于等于相同的可行解在问题 (A) 上的取值，由线性规划的强对偶性知，问题 (B) 和问题 (A) 具有相同的最优值，故若问题 (B) 的最优解是问题 (A) 的可行解，那么就能证明问题 (B) 的最优解都是问题 (A) 的最优解。 因此只需证明对于问题 (B) 的最优解，存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的最优解都满足问题 (A) 的约束条件即可.</p>
+<p>记 $S$ 为 $g(x) = 0$ 的解集，则当 $\mathop{\min}\limits_{x \in S} f(x) \leq \mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p$ 时，问题 (B) 的最优解 $x^\ast \in S$，即 $x^\ast$ 满足问题 (A) 的约束条件.由 $\mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p$，只需 $\mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \in S} f(x)$ 即可，由函数 $g$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负解出</p>
+<script type="math/tex; mode=display">
+\beta \geq \bar{\beta} = \cfrac{\mathop{\min}\limits_{x \in S} f(x)-\mathop{\min}\limits_{x \notin S} f(x)}{\mathop{\min}\limits_{x \notin S} {g}(x)^\top \mathbf{1}_p} \\</script><p>显然问题 (B) 的极点最优解属于其最优解，故存在这样一个 $\bar{\beta}$ 使得问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
+<p>(3) <strong>$Proof.$</strong> 取 $\tilde{\beta} = \max\left\{\bar{\beta},0\right\}$，由 (2) 可知，当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解都是问题 (A) 的最优解，下面只需要证明问题 (A) 的最优解都是问题 (B) 的最优解即可.由函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负和 $\beta \geq 0$，可得</p>
+<script type="math/tex; mode=display">
+f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq  f(x) \\</script><p>故问题 (A) 的最优解取到的最小值一定小于等于相同的可行解在问题 (B) 上的取值，同样地由线性规划的强对偶性知，问题 (B) 和问题 (A) 具有相同的最优值，且问题 (A) 的可行解一定是问题 (B) 的可行解，故问题 (A) 的最优解一定是问题 (B) 的最优解.</p>
+<p>综上所述，存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
+]]></content>
+      <categories>
+        <category>Mathematics</category>
+      </categories>
+      <tags>
+        <tag>Linear Programming</tag>
+        <tag>Duality Theory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>KL散度视角下的极大似然估计</title>
+    <url>/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/</url>
+    <content><![CDATA[<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>假设数据集 $X = \{x^{(1)}, x^{(2)}, \dots, x^{(m)}\}$，每个样本独立同分布地由未知的真实数据生成分布 $p_{\text{data}}(x)$ 生成.</p>
+<p>设 $p_{\text{model}}(x; \theta)$ 是一个用来估计真实概率 $p_{\text{data}}(x)$ 的映射.</p>
+<p>对参数 $\theta$ 的极大似然估计定义如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+            \hat{\theta} &= \arg \max_\theta p_{\text{model}}(X; \theta)\\
+            &= \arg \max_\theta \prod_{i=1}^m p_{\text{model}}(x^{(i)}; \theta)
+\end{aligned}</script><p>由于乘积可能会导致数值溢出等问题，不便于计算，为了得到一个便于计算的等价优化问题，通过取对数转化成便于计算的求和形式：</p>
+<script type="math/tex; mode=display">
+\hat{\theta} = \arg \max_\theta \sum_{i=1}^m \log p_{\text{model}}(x^{(i)}; \theta)</script><p>假设每个数据等概率地从数据集 $X$ 中抽样得到，除以 $m$ 得到训练数据经验分布 $\hat{p}_{\text{data}}$ 的期望形式：</p>
+<script type="math/tex; mode=display">
+\hat{\theta} = \arg \max_\theta \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x; \theta)]</script><span id="more"></span>
+<p>另一种视角下的极大似然估计是将它看作最小化训练集上的经验分布 $\hat{p}_{\text{data}}$ 和模型分布 $p_{\text{model}}$ 之间的差异，两个概率分布之间的差异程度可以通过 KL 散度度量：</p>
+<script type="math/tex; mode=display">
+D_{\text{KL}}(\hat{p}_{\text{data}} \| p_{\text{model}}) = \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log \hat{p}_{\text{data}}(x) - \log p_{\text{model}}(x)]</script><p>左边一项仅涉及到训练集上的数据抽样过程，和模型无关，故上式等价于最小化</p>
+<script type="math/tex; mode=display">
+\mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x)]</script><p>显然这和极大似然估计得到的结果是相同的，同时该式也可以看出最小化 KL 散度与最小化交叉熵等价.</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>均方误差 MSE 等价于经验分布和高斯模型之间的交叉熵，考虑下面这样一个线性回归模型：</p>
+<p>将线性回归作为学习从输入 $x$ 映射到输出 $y$ 的算法，以极大似然估计的视角来看线性回归，现在希望我们的模型能够拟合到条件概率分布 $p(y|x)$，而不是得到一个单独的预测 $\hat{y}$，定义 $p(y|x) = \mathcal{N}(y; \hat{y}(x), \sigma^2)$，即函数 $\hat{y}(x; w)$ 预测高斯的均值，方差是常量。假设这个是独立同分布的，条件对数似然如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\sum_{i=1}^{m} \log p(y^{(i)}|x^{(i)}; \theta)\\
+=& -m \log \sigma - \frac{m}{2} \log (2\pi) - \frac{m}{2} \sum_{i=1}^{m} \frac{(y^{(i)} - \hat{y}(x^{(i)}))^2}{2\sigma^2}
+\end{aligned}</script><p>其中 $\hat{y}^{(i)}$ 是线性回归在第 $i$ 个输入 $x^{(i)}$ 上的输出，$m$ 是训练样本的数目。对比 MSE 和对数似然，</p>
+<script type="math/tex; mode=display">
+\text{MSE} = \frac{1}{m} \sum_{i=1}^{m} |\hat{y}^{(i)} - y^{(i)}|^2</script><p>可以看出最大化关于 $w$ 的对数似然和最小化均方误差会得到相同的参数估计 $w$.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>理想情况下，我们希望用经验分布 $\hat{p}_{\text{data}}$ 匹配真实的数据生成分布 $p_{\text{data}}$，但由于我们没法直接知道这个分布，因此使用极大似然估计的思想，用经验分布 $\hat{p}_{\text{data}}$ 去匹配模型分布 $p_{\text{model}}$.</p>
+]]></content>
+      <categories>
+        <category>Machine Learning</category>
+      </categories>
+      <tags>
+        <tag>KL Divergence</tag>
+        <tag>Maximum Likelihood Estimate</tag>
+        <tag>Cross Entropy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mirror Descent</title>
+    <url>/2024/07/20/Mirror_Descent/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>Optimization</category>
+      </categories>
+      <tags>
+        <tag>Bregman Divergence</tag>
+        <tag>Dual Space</tag>
       </tags>
   </entry>
   <entry>
@@ -50,7 +211,7 @@ f(X+tV)-f(V) &= \text{ln}(\text{det}(X+tV))-\text{ln}(\text{det}(X)) \\
     <url>/2024/10/07/PCA/</url>
     <content><![CDATA[<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>1.将数据维度降低到二维或者三维以便将其可视化.</p>
 <div align=center>
-<style>.qsevnjofbihe{}</style><img src="/2024/10/07/PCA/2.png" class="qsevnjofbihe">
+<style>.frtfuntkrmnt{}</style><img src="/2024/10/07/PCA/2.png" class="frtfuntkrmnt">
 </div>
 
 <p>2.去噪，如果数据中存在噪声，用更少的解释变量来表示，舍弃某些变量有时可以起到去噪的效果.</p>
@@ -72,7 +233,7 @@ V_{in}=k r_{in}^n
 = & 1
 \end{aligned}</script><p>可以发现当维度很高的时候，球壳的几乎占据了整个球体，意味着无论这个 $\varepsilon$ 有多小，数据几乎都分布在这个球壳当中，而中间空着的部分分布着极少的数据，因此高维空间中数据的分布通常更加稀疏.</p>
 <div align=center>
-<style>.ojaucxybvqoj{}</style><img src="/2024/10/07/PCA/1.png" class="ojaucxybvqoj">
+<style>.nmezdpkirsgo{}</style><img src="/2024/10/07/PCA/1.png" class="nmezdpkirsgo">
 </div>
 
 <span id="more"></span>
@@ -87,7 +248,7 @@ V_{in}=k r_{in}^n
 <script type="math/tex; mode=display">
 \mathbf{y} = A \mathbf{x}</script><p>PCA 的示意图如下：</p>
 <div align=center>
-<style>.phnyoizgwixm{}</style><img src="/2024/10/07/PCA/3.jpg" class="phnyoizgwixm">
+<style>.omkrikfykjuf{}</style><img src="/2024/10/07/PCA/3.jpg" class="omkrikfykjuf">
 </div>
 
 <p>记 </p>
@@ -385,212 +546,6 @@ L(\hat{\sigma}, \hat{u}, \hat{v}, \lambda) = \hat{\sigma}^2 - 2 \hat{\sigma} \su
       </tags>
   </entry>
   <entry>
-    <title>KL散度视角下的极大似然估计</title>
-    <url>/2024/07/24/KL%E6%95%A3%E5%BA%A6%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/</url>
-    <content><![CDATA[<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>假设数据集 $X = \{x^{(1)}, x^{(2)}, \dots, x^{(m)}\}$，每个样本独立同分布地由未知的真实数据生成分布 $p_{\text{data}}(x)$ 生成.</p>
-<p>设 $p_{\text{model}}(x; \theta)$ 是一个用来估计真实概率 $p_{\text{data}}(x)$ 的映射.</p>
-<p>对参数 $\theta$ 的极大似然估计定义如下：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-            \hat{\theta} &= \arg \max_\theta p_{\text{model}}(X; \theta)\\
-            &= \arg \max_\theta \prod_{i=1}^m p_{\text{model}}(x^{(i)}; \theta)
-\end{aligned}</script><p>由于乘积可能会导致数值溢出等问题，不便于计算，为了得到一个便于计算的等价优化问题，通过取对数转化成便于计算的求和形式：</p>
-<script type="math/tex; mode=display">
-\hat{\theta} = \arg \max_\theta \sum_{i=1}^m \log p_{\text{model}}(x^{(i)}; \theta)</script><p>假设每个数据等概率地从数据集 $X$ 中抽样得到，除以 $m$ 得到训练数据经验分布 $\hat{p}_{\text{data}}$ 的期望形式：</p>
-<script type="math/tex; mode=display">
-\hat{\theta} = \arg \max_\theta \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x; \theta)]</script><span id="more"></span>
-<p>另一种视角下的极大似然估计是将它看作最小化训练集上的经验分布 $\hat{p}_{\text{data}}$ 和模型分布 $p_{\text{model}}$ 之间的差异，两个概率分布之间的差异程度可以通过 KL 散度度量：</p>
-<script type="math/tex; mode=display">
-D_{\text{KL}}(\hat{p}_{\text{data}} \| p_{\text{model}}) = \mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log \hat{p}_{\text{data}}(x) - \log p_{\text{model}}(x)]</script><p>左边一项仅涉及到训练集上的数据抽样过程，和模型无关，故上式等价于最小化</p>
-<script type="math/tex; mode=display">
-\mathbb{E}_{x \sim \hat{p}_{\text{data}}} [\log p_{\text{model}}(x)]</script><p>显然这和极大似然估计得到的结果是相同的，同时该式也可以看出最小化 KL 散度与最小化交叉熵等价.</p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>均方误差 MSE 等价于经验分布和高斯模型之间的交叉熵，考虑下面这样一个线性回归模型：</p>
-<p>将线性回归作为学习从输入 $x$ 映射到输出 $y$ 的算法，以极大似然估计的视角来看线性回归，现在希望我们的模型能够拟合到条件概率分布 $p(y|x)$，而不是得到一个单独的预测 $\hat{y}$，定义 $p(y|x) = \mathcal{N}(y; \hat{y}(x), \sigma^2)$，即函数 $\hat{y}(x; w)$ 预测高斯的均值，方差是常量。假设这个是独立同分布的，条件对数似然如下：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-&\sum_{i=1}^{m} \log p(y^{(i)}|x^{(i)}; \theta)\\
-=& -m \log \sigma - \frac{m}{2} \log (2\pi) - \frac{m}{2} \sum_{i=1}^{m} \frac{(y^{(i)} - \hat{y}(x^{(i)}))^2}{2\sigma^2}
-\end{aligned}</script><p>其中 $\hat{y}^{(i)}$ 是线性回归在第 $i$ 个输入 $x^{(i)}$ 上的输出，$m$ 是训练样本的数目。对比 MSE 和对数似然，</p>
-<script type="math/tex; mode=display">
-\text{MSE} = \frac{1}{m} \sum_{i=1}^{m} |\hat{y}^{(i)} - y^{(i)}|^2</script><p>可以看出最大化关于 $w$ 的对数似然和最小化均方误差会得到相同的参数估计 $w$.</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>理想情况下，我们希望用经验分布 $\hat{p}_{\text{data}}$ 匹配真实的数据生成分布 $p_{\text{data}}$，但由于我们没法直接知道这个分布，因此使用极大似然估计的思想，用经验分布 $\hat{p}_{\text{data}}$ 去匹配模型分布 $p_{\text{model}}$.</p>
-]]></content>
-      <categories>
-        <category>Machine Learning</category>
-      </categories>
-      <tags>
-        <tag>KL Divergence</tag>
-        <tag>Maximum Likelihood Estimate</tag>
-        <tag>Cross Entropy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mirror Descent</title>
-    <url>/2024/07/20/Mirror_Descent/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>Optimization</category>
-      </categories>
-      <tags>
-        <tag>Bregman Divergence</tag>
-        <tag>Dual Space</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第2题)</title>
-    <url>/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T2/</url>
-    <content><![CDATA[<p>今天写一下第二题我的个人解答，这道题源自 NIPS2022 的一篇论文《The alignment property of SGD noise and how it helps select flat minima: A stability analysis》，问题的背景是与梯度下降(GD)相比，随机梯度下降(SGD)在过参数化的神经网络训练过程中可以收敛到一个更加平缓(flat)的极值点，而且平缓程度与神经网络的参数量无关.</p>
-<p><strong>T2</strong>. 假设 $F(x;w)$ 是一个输出标量的深度神经网络，其中 $x$ 是输入, $w$ 表示权重.假设 $F$ 关于 $w$ 连续可微, 并且对于训练数据 $\{x_j, y_j\}_{j=1}^m$ 过参数化, 即存在 $w^\ast$ 使得对于所有 $j$ 满足 $F(x_j;w^\ast) = y_j$.为了研究训练神经网络时 $w^\ast$ 的局部优化行为，我们考虑线性化神经网络 $\tilde{F}(x;w) = F(x;w^\ast) + (w - w^\ast)^\text{T} \nabla F(x;w^\ast)$，其损失函数为</p>
-<script type="math/tex; mode=display">
-\text{Loss}(w) := \frac{1}{2m} \sum_{j=1}^m (y_j - \tilde{F}(x_j;w))^2</script><p>令 $s$ 表示学习率，梯度下降法为</p>
-<script type="math/tex; mode=display">
-w_{i+1} = w_i - s \nabla \text{Loss}(w_i)</script><p>而随机梯度下降法为</p>
-<script type="math/tex; mode=display">
-w_{i+1} = w_i - s (\nabla \text{Loss}(w_i) + \epsilon_i)</script><p>其中噪声项满足 $\mathbb{E} \epsilon_i = 0$ 和 $\mathbb{E} \epsilon_i \epsilon_i^\top = M(w_i)/b$，$b$ 是 mini-batch 的大小.假设协方差矩阵 $\Sigma$ 为</p>
-<script type="math/tex; mode=display">
-\Sigma = \frac{1}{m} \sum_{j=1}^m \nabla F(x_j;w^\ast) \nabla F(x_j;w^*)^\text{T}</script><p>在以下意义上对齐:</p>
-<script type="math/tex; mode=display">
-\frac{\text{Tr}(M(w)\Sigma)}{2\text{Loss}(w)\|\Sigma\|_F^2} \geq \delta</script><p>对于 $s &gt; 0$ 和所有 $w$ 成立。这里 $|\cdot|_F$ 表示 Frobenius 范数。</p>
-<p>(1) 对于梯度下降，证明如果 $\Sigma$ 的谱范数满足</p>
-<script type="math/tex; mode=display">
-\|\Sigma\|_2 \leq \frac{2}{s}</script><p>则梯度下降是局部稳定的(即对于所有 $i$, $\text{Loss}(w_i)$ 是有界的).(注意，这蕴含了一个依赖维度的 $|\Sigma|_F \leq \dfrac{2\sqrt{d}}{s}$，其中 $d$ 是 $w$ 的维度).</p>
-<p>(2) 对于随机梯度下降，如果 $\mathbb{E}\text{Loss}(w_i)$ 对于所有 $i$ 都有界，则以下独立于维度的不等式必须成立</p>
-<script type="math/tex; mode=display">
-\|\Sigma\|_F \leq \frac{\sqrt{b\delta}}{s}</script><span id="more"></span>
-<p>(1) <strong>$Proof$.</strong> 由过参数化的条件有，$F(x_j; w^*) = y_j$，那么</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\text{Loss}(w_i) &= \frac{1}{2m} \sum_{j=1}^{m} \left( F(x_j; w^\ast) + (w_i - w^\ast)^\text{T} \nabla F(x_j; w^\ast) - y_j \right)^2 \\
-&= \frac{1}{2m} \sum_{j=1}^{m} \left( (w_i - w^\ast)^\text{T} \nabla F(x_j; w^\ast) \right)^2
-\end{aligned}</script><p>对 $\text{Loss}(w_i)$ 求梯度可得</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\nabla \text{Loss}(w_i) &= \frac{1}{m} \sum_{j=1}^{m} \nabla F(x_j; w^\ast) \nabla F(x_j; w^\ast)^\text{T} (w_i - w^\ast) \\
-&= \Sigma (w_i - w^\ast)
-\end{aligned}</script><p>由梯度下降的更新格式，有</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-w_{i+1} - w^\ast &= w_i - s \nabla \text{Loss}(w_i) - w^\ast \\
-&= (I - s\Sigma)(w_i - w^\ast)
-\end{aligned}</script><p>对上述两边同时取 $2$ 范数，因为 $I - s\Sigma$ 为对称矩阵，因此一定存在矩阵 $P$ 使得 $I - s\Sigma$ 可以正交对角化，故</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\|I - s\Sigma\|_2 &= \|P(I - s\Sigma)P^\text{T}\|_2 \\
-&= \|I - s\Lambda\|_2 \\
-&= \rho(I - s\Lambda)
-\end{aligned}</script><p>由 $\Sigma$ 为半正定矩阵，以及 $\rho(\Sigma) \leq \dfrac{2}{s}$，可得 $I - s\Lambda$ 对角线上元素范围为 $[-1, 1]$，即 $\rho(I - s\Lambda) \leq 1$</p>
-<p>所以</p>
-<script type="math/tex; mode=display">
-\|w_{i+1} - w^\ast\|_2 \leq \|w_i - w^\ast\|_2 \leq \dots \leq \|w_0 - w^\ast\|_2</script><p>由</p>
-<script type="math/tex; mode=display">
-\text{Loss}(w_i) = \frac{1}{2} (w_i - w^\ast)^\text{T} \Sigma (w_i - w^\ast)</script><p>可得</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-|\text{Loss}(w_i)| &\leq \frac{1}{2} \|(w_i - w^\ast)\|_2^2 \|\Sigma\|_F \\
-&\leq \frac{\sqrt{d}\|(w_i - w^\ast)\|_2^2}{s}
-\end{aligned}</script><p>故梯度下降法是局部稳定的.</p>
-<p>第二小问的证明过程参考论文 《The alignment property of SGD noise and how it helps select flat minima: A stability analysis》 中的 Theorem 3.3 的证明</p>
-<p>(2) <strong>$Proof$.</strong> 记 $\theta_i = w_i - w^\ast$，那么有</p>
-<script type="math/tex; mode=display">
-\text{Loss}(w_i) = \frac{1}{2} \theta_i^\text{T} \Sigma \theta_i</script><script type="math/tex; mode=display">
-\nabla \text{Loss}(w_i) = \Sigma \theta_i</script><p>计算 $\mathbb{E}\text{Loss}(w_{i+1})$，并由 $\mathbb{E}\epsilon_i = 0$ 和 $\mathbb{E}\epsilon_i \epsilon_i^\text{T} = M(w_i)/b$，有</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\mathbb{E}\text{Loss}(w_{i+1}) &= \mathbb{E}\left[\frac{1}{2}(w_{i+1} - w^\ast)^\text{T} \Sigma (w_{i+1} - w^\ast)\right] \\
-&= \mathbb{E}\left[\frac{1}{2} (\theta_i - s(\nabla \text{Loss}(w_i) + \epsilon_i))^\text{T} \Sigma (\theta_i - s(\nabla \text{Loss}(w_i) + \epsilon_i))\right] \\
-&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i - s \theta_i^\text{T} \Sigma \epsilon_i + \frac{1}{2} s^2 (\Sigma \theta_i + \epsilon_i)^\text{T} \Sigma (\Sigma \theta_i + \epsilon_i)\right] \\
-&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i + \frac{1}{2} s^2 (\Sigma \theta_i + \epsilon_i)^\text{T} \Sigma (\Sigma \theta_i + \epsilon_i)\right] \\
-&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i\right] + \frac{1}{2} s^2 \mathbb{E} [(\Sigma \theta_i + \epsilon_i)^\text{T} \Sigma (\Sigma \theta_i + \epsilon_i)] \\
-&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i\right] + \frac{1}{2} s^2 \mathbb{E} [\theta_i^\text{T} \Sigma^3 \theta_i + \epsilon_i^\text{T} \Sigma^2 \theta_i + \epsilon_i^\text{T} \Sigma \epsilon_i] \\
-&= \mathbb{E}\left[\frac{1}{2} \theta_i^\text{T} \Sigma \theta_i - s \theta_i^\text{T} \Sigma^2 \theta_i\right] + \frac{1}{2} s^2 \mathbb{E} [\theta_i^\text{T} \Sigma^3 \theta_i] + \frac{1}{2} s^2 \mathbb{E} [\epsilon_i^\text{T} \Sigma \epsilon_i]
-\end{aligned}</script><p>考虑期望 $\mathbb{E}[x^\text{T} A x]$，其中 $\mathbb{E}x = 0$ 和 $\mathbb{E}xx^\text{T} = M(w_i)/b$</p>
-<script type="math/tex; mode=display">
-\mathbb{E}[x^\text{T} A x] = \mathbb{E}\left[\sum_{i=1}^n \sum_{j=1}^n x_i A_{ij} x_j \right]</script><script type="math/tex; mode=display">
-= \sum_{i=1}^n \sum_{j=1}^n A_{ij} \mathbb{E}[x_i x_j]</script><p>对于 $i \neq j$，因为 $x$ 的均值为 $0$，$\mathbb{E}[x_i x_j] = 0$（这里假设各个分量是相互独立的），故</p>
-<script type="math/tex; mode=display">
-\mathbb{E}[x^\text{T} A x] = \sum_{i=1}^n A_{ii} \mathbb{E}[x_i^2] = \text{Tr}(A \mathbb{E}xx^\text{T})</script><p>即</p>
-<script type="math/tex; mode=display">
-\mathbb{E}[\epsilon_i^\text{T} \Sigma \epsilon_i] = \text{Tr}(\Sigma \mathbb{E}\epsilon_i \epsilon_i^\text{T}) = \frac{1}{b} \text{Tr}(M(w_i) \Sigma)</script><p>记 $r(\theta) = 1 - 2s \dfrac{\theta^\text{T} \Sigma^2 \theta}{\theta^\text{T} \Sigma \theta} + s^2 \dfrac{\theta^\text{T} \Sigma^3 \theta}{\theta^\text{T} \Sigma \theta}$，那么</p>
-<script type="math/tex; mode=display">
-\mathbb{E} \text{Loss}(w_{i+1}) = \mathbb{E} [r(\theta_i) \text{Loss}(w_i)] + \frac{s^2}{2b} \text{Tr}(M(w_i)\Sigma)</script><p>下证 $r(\theta) \geq 0$，令</p>
-<script type="math/tex; mode=display">
-u = \frac{\Sigma^{1/2} \theta}{\|\Sigma^{1/2} \theta\|_2}</script><p>并对 $\Sigma$ 进行谱分解</p>
-<script type="math/tex; mode=display">
-\Sigma = \sum_j \lambda_j e_j e_j^T</script><p>假设 $u$ 在 $e_i$ 这组标准正交基下的表示如下</p>
-<script type="math/tex; mode=display">
-u = \sum_j a_j e_j</script><p>且由 $|u|_2 = 1$ 得 $\sum_j a_j^2 = 1$，那么</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-r(\theta) &= 1 - 2s u^\text{T} \Sigma u + s^2 u^\text{T} \Sigma^2 u \\
-&= 1 + \sum_j (-2s \lambda_j - s^2 \lambda_j^2) a_j^2 \\
-&\geq 1 + \inf_{\lambda \geq 0} (-2s \lambda - s^2 \lambda^2) = 0
-\end{aligned}</script><p>由 $r(\theta_i) \text{Loss}(w_i) \geq 0$ 和 $\dfrac{\text{Tr}(M(w)\Sigma)}{2 \text{Loss}(w)|\Sigma|_F^2} \geq \delta$，有</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\mathbb{E} \text{Loss}(w_{i+1}) &= \mathbb{E}[r(\theta_i) \text{Loss}(w_i)]+\frac{s^2}{2b} \text{Tr}(M(w_i)\Sigma)\\
-&\geq \frac{s^2}{2b} \text{Tr}(M(w_i)\Sigma)\\
-&\geq \frac{s^2}{b} \delta \text{Loss}(w_{i}) \|\Sigma\|_F^2\\
-\end{aligned}</script><p>因为 $\mathbb{E} \text{Loss}(w_{i+1})$ 是有界的，所以</p>
-<script type="math/tex; mode=display">
-\frac{s^2}{b} \delta \|\Sigma\|_F^2 \leq 1</script><p>否则，令 $q=\dfrac{s^2}{b} \delta |\Sigma|_F^2$</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\mathbb{E} \text{Loss}(w_{i+1}) &\geq \frac{s^2}{b} \delta \text{Loss}(w_{i}) \|\Sigma\|_F^2\\
-&=q^i \text{Loss}(w_{1})
-\end{aligned}</script><p>$\mathbb{E} \text{Loss}(w_{i+1})$ 呈指数增长，矛盾.故 $|\Sigma|_F \leq \dfrac{\sqrt{b\delta}}{s}$，证毕.</p>
-]]></content>
-      <categories>
-        <category>Mathematics</category>
-      </categories>
-      <tags>
-        <tag>Matrix Theory</tag>
-        <tag>Over-parameterization</tag>
-        <tag>Gradient Descent</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2024阿里巴巴数学竞赛决赛(应用与计算赛道第4题)</title>
-    <url>/2024/07/20/2024%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%95%B0%E5%AD%A6%E7%AB%9E%E8%B5%9B%E5%86%B3%E8%B5%9B%E5%BA%94%E7%94%A8%E4%B8%8E%E8%AE%A1%E7%AE%97%E8%B5%9B%E9%81%93T4/</url>
-    <content><![CDATA[<p>分享一下2024年阿里巴巴数学竞赛决赛（应用与计算赛道）第 4 题的个人解答.</p>
-<p><strong>T4</strong>. 考虑如下两个优化问题：</p>
-<script type="math/tex; mode=display">\begin{aligned}         
-\text{(A)} \quad &\mathop{\min}\limits_{x}  f(x),\\\\         &\text{s.t.} \quad \mathbf{g}(x) = 0,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>和</p>
-<script type="math/tex; mode=display">
-\begin{aligned}         \text{(B)} \quad & \mathop{\min}\limits_{x} f(x) + \beta {g}(x)^\top \mathbf{1}_p,\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>其中 $ x := [x_1^T, \cdots, x_n^T]^T \in \mathbb{R}^m (m, n \in \mathbb{N}) $，且对于 $i = 1, \cdots, n$，$x_i \in \mathbb{R}^{m_i} (m_i \in \mathbb{N})$，满足 $\sum_{i=1}^n m_i = m$。函数 $f: \mathbb{R}^m \to \mathbb{R}$ 和 $\mathbf{g}: \mathbb{R}^m \to \mathbb{R}^p (p \in \mathbb{N})$ 是多仿射的，即对任意 $i \in \{1, \cdots, n\}$，在固定下标在 $\{1, \cdots, N\} \setminus \{i\}$ 中的块后，它们对 $x_i$ 是仿射函数。这里，我们称一个函数 $h: \mathbb{R}^q \to \mathbb{R}^r (q, r \in \mathbb{N})$ 为仿射的，若对任意 $a \in \mathbb{R}$ 以及 $y^{(1)}, y^{(2)} \in \mathbb{R}^q$，有</p>
-<script type="math/tex; mode=display">
-h(a y^{(1)} + (1-a) y^{(2)}) = a h(y^{(1)}) + (1-a) h(y^{(2)}).</script><p>对任意 $i \in \{1, \cdots, n\}$，集合 $ \mathcal{F}_i \subseteq \mathbb{R}^{m_i} $ 是一个有界多面体。函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负，其中 “$\times$” 表示集合的笛卡尔积。此外，在问题 (B) 中，标量 $\beta$ 是一个实数，$\mathbf{1}_p $ 代表 $p$ 维全一向量。</p>
-<p>(1) 对任意  $\beta \in \mathbb{R} $，问题 (B) 至少有一个最优解是可行的极点(即极点最优解).<br>(2) 存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的极点最优解都是问题 (A) 的最优解.<br>(3) 存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
-<span id="more"></span>
-<p>(1) <strong>$Proof.$</strong> 假设 $x^\ast$ 为非极点的最优解，考虑 $x^\ast$ 为多边形的内点(边界点情况类似)，任取一个方向向量 $d$，构造函数</p>
-<script type="math/tex; mode=display">
-\varphi(t)=f(x^\ast+td)+\beta g(x^\ast+td)^T\mathbf{1}_p \\</script><p>由于，$f$ 和 $g$ 均为仿射函数，故 $\varphi$ 为关于 $t$ 的 $1$ 次函数，但由于 $x^\ast$ 为最优解，故 $\varphi (t)$ 不能是增函数，否则在沿 $d$ 的反方向上可以找到更小的值，与 $x^\ast$ 为最优解矛盾，同理也不能是减函数，只能为常值函数.</p>
-<p>同时，由于存在极值点的多面体中一定不包含直线(这句话的证明参考 《Introduction to Linear Optimization》 第 2.5 节)，故沿着 $d$ 或 $-d$ 方向可以走到多面体的区域边界，类似地，按照上面的构造方法沿着边界方向继续走，可以到找一个极点最优解.</p>
-<p>(2) <strong>$Proof.$</strong> 显然问题 (B) 的目标函数为问题 (A) 的Lagrange对偶形式，记</p>
-<script type="math/tex; mode=display">
-L(x,\beta) = f(x) + \beta {g}(x)^\top \mathbf{1}_p \\</script><p>则问题 (A) 可以写为如下等价形式</p>
-<script type="math/tex; mode=display">
-\begin{aligned}          & \mathop{\min}\limits_{x} \mathop{\max}\limits_{\beta} L(x,\beta),\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>问题 (B) 可以写为如下形式</p>
-<script type="math/tex; mode=display">
-\begin{aligned}          & \mathop{\min}\limits_{x}  L(x,\beta),\\\\         &x_i \in \mathcal{F}_i, i = 1, \cdots, n \end{aligned} \\</script><p>对满足约束 $x_i \in \mathcal{F}_i, i = 1, \cdots, n$ 的 $x$ 有</p>
-<script type="math/tex; mode=display">
-L(x,\beta) \leq \mathop{\max}\limits_{\beta} L(x,\beta) \\</script><p>问题 (B) 的最优解取到的最小值一定小于等于相同的可行解在问题 (A) 上的取值，由线性规划的强对偶性知，问题 (B) 和问题 (A) 具有相同的最优值，故若问题 (B) 的最优解是问题 (A) 的可行解，那么就能证明问题 (B) 的最优解都是问题 (A) 的最优解。 因此只需证明对于问题 (B) 的最优解，存在 $ \bar{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \bar{\beta} $，问题 (B) 的最优解都满足问题 (A) 的约束条件即可.</p>
-<p>记 $S$ 为 $g(x) = 0$ 的解集，则当 $\mathop{\min}\limits_{x \in S} f(x) \leq \mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p$ 时，问题 (B) 的最优解 $x^\ast \in S$，即 $x^\ast$ 满足问题 (A) 的约束条件.由 $\mathop{\min}\limits_{x \notin S} f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p$，只需 $\mathop{\min}\limits_{x \notin S} f(x) + \mathop{\min}\limits_{x \notin S} \beta {g}(x)^\top \mathbf{1}_p \geq \mathop{\min}\limits_{x \in S} f(x)$ 即可，由函数 $g$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负解出</p>
-<script type="math/tex; mode=display">
-\beta \geq \bar{\beta} = \cfrac{\mathop{\min}\limits_{x \in S} f(x)-\mathop{\min}\limits_{x \notin S} f(x)}{\mathop{\min}\limits_{x \notin S} {g}(x)^\top \mathbf{1}_p} \\</script><p>显然问题 (B) 的极点最优解属于其最优解，故存在这样一个 $\bar{\beta}$ 使得问题 (B) 的极点最优解都是问题 (A) 的最优解.</p>
-<p>(3) <strong>$Proof.$</strong> 取 $\tilde{\beta} = \max\left\{\bar{\beta},0\right\}$，由 (2) 可知，当 $\beta \geq \tilde{\beta}$ 时，问题 (B) 的最优解都是问题 (A) 的最优解，下面只需要证明问题 (A) 的最优解都是问题 (B) 的最优解即可.由函数 $\mathbf{g}$ 在 $ \times_{i=1}^n \mathcal{F}_i $ 上非负和 $\beta \geq 0$，可得</p>
-<script type="math/tex; mode=display">
-f(x) + \beta {g}(x)^\top \mathbf{1}_p \geq  f(x) \\</script><p>故问题 (A) 的最优解取到的最小值一定小于等于相同的可行解在问题 (B) 上的取值，同样地由线性规划的强对偶性知，问题 (B) 和问题 (A) 具有相同的最优值，且问题 (A) 的可行解一定是问题 (B) 的可行解，故问题 (A) 的最优解一定是问题 (B) 的最优解.</p>
-<p>综上所述，存在 $ \tilde{\beta} \in \mathbb{R} $，使得对任意 $ \beta \geq \tilde{\beta} $，问题 (A) 和 (B) 的最优解集合相同.</p>
-]]></content>
-      <categories>
-        <category>Mathematics</category>
-      </categories>
-      <tags>
-        <tag>Linear Programming</tag>
-        <tag>Duality Theory</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Pinsker Inequality</title>
     <url>/2024/06/23/Pinsker_Inequality/</url>
     <content><![CDATA[<p>最近在做 Mirror Descent 相关的一个项目的收敛性分析，需要用到 Pinsker 不等式，这里简单记录一下它的证明，文中的 $log$ 均是以 $e$ 为底的。</p>
@@ -668,6 +623,51 @@ f(x) &= f(y) + \langle \nabla f(y), x - y \rangle + D_{KL}(x || y) \quad \\\\
         <tag>KL Divergence</tag>
         <tag>Probability Inequality</tag>
         <tag>Strong-Convexity</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>矩阵求导</title>
+    <url>/2024/10/08/%E7%9F%A9%E9%98%B5%E6%B1%82%E5%AF%BC/</url>
+    <content><![CDATA[<h3 id="矩阵求导"><a href="#矩阵求导" class="headerlink" title="矩阵求导"></a>矩阵求导</h3><h4 id="矩阵变量函数的导数"><a href="#矩阵变量函数的导数" class="headerlink" title="矩阵变量函数的导数"></a>矩阵变量函数的导数</h4><p>定义 (Fréchet 可微) 设 $f(X)$ 为矩阵变量函数，如果存在矩阵 $G \in \mathbb{R}^{m \times n}$， </p>
+<script type="math/tex; mode=display">
+\underset{V \rightarrow 0}{lim} \dfrac{f(X + V) − f(X) − ⟨G,V⟩}{\|V\|} = 0</script><p>则称 $f$ 关于 $X$ 是 Fréchet 可微的．满足上式的 $G$ 称为 $f$ 在 $X$ 处在 Fréchet 可微意义下的梯度．</p>
+<p>定义 (Gâteaux 可微) 设 $f(X)$ 为矩阵变量函数，如果存在矩阵 $G \in \mathbb{R}^{m \times n}$，对任意方向 $V \in \mathbb{R}^{m \times n}$ 满足 </p>
+<script type="math/tex; mode=display">
+\underset{t \rightarrow 0}{lim} \dfrac{f(X + tV) − f(X) − t⟨G,V⟩}{t} = 0</script><p>则称 $f$ 关于 $X$ 是 Gâteaux 可微的．满足上式的 $G$ 称为 $f$ 在 $X$ 处在 Gâteaux 可微意义下的梯度．</p>
+<p>若 $f$ 是 Fréchet 可微的， 则 $f$ 也是 Gâteaux 可微的，且二者意义下的梯度相等，通常情况下，由于 Gâteaux 可微定义式更容易操作，因此通常是利用 Gâteaux 梯度的定义来计算矩阵变量函数的导数(向量情况类似).</p>
+<h4 id="计算实例"><a href="#计算实例" class="headerlink" title="计算实例"></a>计算实例</h4><p><strong>例1.</strong> $f(X) = \text{Tr}(AX^\text{T}B)$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\underset{t \rightarrow 0}{lim} \dfrac{f(X+tV)-f(V)}{t} &= \underset{t \rightarrow 0}{lim} \dfrac{\text{Tr}(A(X+tV)^\text{T}B)-\text{Tr}(AX^\text{T}B)}{t} \\
+  &= \text{Tr}(AV^\text{T}B) = \langle BA,V\rangle
+\end{aligned}</script><p>因此，$\nabla f(X) = BA$.</p>
+<span id="more"></span>
+<p><strong>例2.</strong> $f(X) = \text{ln}(\text{det}(X)),X \in S^n_{++}$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f(X+tV)-f(V) &= \text{ln}(\text{det}(X+tV))-\text{ln}(\text{det}(X)) \\
+  &= \text{ln}(\text{det}(X^{1/2}(I + tX^{−1/2}VX^{−1/2})X^{1/2})) − ln(det(X)) \\
+  &= \text{ln}(\text{det}(I + tX^{−1/2}VX^{−1/2}))
+\end{aligned}</script><p>由于 $X^{−1/2}VX^{−1/2}$ 是对称矩阵，可以正交对角化，设它的特征值为 $\lambda_1,\lambda_2,\cdots,\lambda_n$，则</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\text{ln}(\text{det}(I + tX^{−1/2}VX^{−1/2})) \\
+=& \text{ln}\prod^n_{i=1}(1+t \lambda_i) \\
+=& \sum^n_{i=1}\text{ln}(1+t \lambda_i) \\
+=& \sum^n_{i=1}t\lambda_i+\mathcal{O}(t^2) \\
+=& t\text{Tr}(X^{−1/2}VX^{−1/2})+\mathcal{O}(t^2) \\
+=& t\langle (X^{-1})^\text{T},V \rangle+\mathcal{O}(t^2) \\
+\end{aligned}</script><p>因此，$\nabla f(X) = (X^{-1})^\text{T}$.</p>
+<h4 id="常用公式"><a href="#常用公式" class="headerlink" title="常用公式"></a>常用公式</h4><p>$\dfrac{ \partial a^Tx }{ \partial x } = a$</p>
+<p>$\dfrac{ \partial x^Ta }{ \partial x } = a$</p>
+<p>$\dfrac{ \partial x^Tx }{ \partial x } = 2x$</p>
+<p> $\dfrac{ \partial x^TAx }{ \partial x } = (A+A^T)x$</p>
+]]></content>
+      <categories>
+        <category>Mathematics</category>
+      </categories>
+      <tags>
+        <tag>Matrix Theory</tag>
       </tags>
   </entry>
 </search>
