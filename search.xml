@@ -50,7 +50,7 @@ f(X+tV)-f(V) &= \text{ln}(\text{det}(X+tV))-\text{ln}(\text{det}(X)) \\
     <url>/2024/10/07/PCA/</url>
     <content><![CDATA[<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>1.将数据维度降低到二维或者三维以便将其可视化.</p>
 <div align=center>
-<style>.kmgqnrmrksmp{}</style><img src="/2024/10/07/PCA/2.png" class="kmgqnrmrksmp">
+<style>.bqgmupxipmsm{}</style><img src="/2024/10/07/PCA/2.png" class="bqgmupxipmsm">
 </div>
 
 <p>2.去噪，如果数据中存在噪声，用更少的解释变量来表示，舍弃某些变量有时可以起到去噪的效果.</p>
@@ -72,7 +72,7 @@ V_{in}=k r_{in}^n
 = & 1
 \end{aligned}</script><p>可以发现当维度很高的时候，球壳的几乎占据了整个球体，意味着无论这个 $\varepsilon$ 有多小，数据几乎都分布在这个球壳当中，而中间空着的部分分布着极少的数据，因此高维空间中数据的分布通常更加稀疏.</p>
 <div align=center>
-<style>.stkwyupdrbcc{}</style><img src="/2024/10/07/PCA/1.png" class="stkwyupdrbcc">
+<style>.tqslgrnjwetl{}</style><img src="/2024/10/07/PCA/1.png" class="tqslgrnjwetl">
 </div>
 
 <span id="more"></span>
@@ -87,7 +87,7 @@ V_{in}=k r_{in}^n
 <script type="math/tex; mode=display">
 \mathbf{y} = A \mathbf{x}</script><p>PCA 的示意图如下：</p>
 <div align=center>
-<style>.ecvvgppnexah{}</style><img src="/2024/10/07/PCA/3.jpg" class="ecvvgppnexah">
+<style>.skayufqmngqg{}</style><img src="/2024/10/07/PCA/3.jpg" class="skayufqmngqg">
 </div>
 
 <p>记 </p>
@@ -376,7 +376,7 @@ L(\hat{\sigma}, \hat{u}, \hat{v}, \lambda) = \hat{\sigma}^2 - 2 \hat{\sigma} \su
 \lambda_1 \lambda_2 \hat{u} = \sigma^2 \sum_i \sigma_i^2 (u_i^T \hat{u}) u_i</script><p>已经选择过的基向量由正交性会自动消掉，最终选择奇异值最小化 $-\sigma_t^2$ 时，每一次都选择剩下的奇异值中最大的那个.</p>
 <p>因此秩 $k$ 情形下选择的就是最大的前 $k$ 个奇异值以及其对应的基向量.</p>
 <p>因此 SVD 等价于秩 $k$ 矩阵的最佳逼近，而 PCA 可以通过 SVD 来完成，故等价于该优化问题的求解过程.</p>
-<h2 id="Probabilistic-PCA"><a href="#Probabilistic-PCA" class="headerlink" title="Probabilistic PCA"></a>Probabilistic PCA</h2>]]></content>
+]]></content>
       <categories>
         <category>Machine Learning</category>
       </categories>
@@ -422,18 +422,6 @@ D_{\text{KL}}(\hat{p}_{\text{data}} \| p_{\text{model}}) = \mathbb{E}_{x \sim \h
         <tag>KL Divergence</tag>
         <tag>Maximum Likelihood Estimate</tag>
         <tag>Cross Entropy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mirror Descent</title>
-    <url>/2024/07/20/Mirror_Descent/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>Optimization</category>
-      </categories>
-      <tags>
-        <tag>Bregman Divergence</tag>
-        <tag>Dual Space</tag>
       </tags>
   </entry>
   <entry>
